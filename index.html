@@ -4,690 +4,483 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JNB Express — Same-Day, Every Day</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --blue: #1A3A6B;
-  --brown: #8B6343;
-  --white: #ffffff;
-  --dark: #0a0a0a;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--dark);
-  color: var(--white);
-  font-family: 'Exo 2', 'Arial Black', Arial, sans-serif;
-  overflow-x: hidden;
-}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#0a0a0a;color:#fff;font-family:'Exo 2','Arial Black',Arial,sans-serif;overflow-x:hidden}
 
 /* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; width: 100%; z-index: 200;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 64px;
-  background: rgba(10,10,10,0.85);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  backdrop-filter: blur(10px);
+nav{
+  position:fixed;top:0;left:0;width:100%;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 52px;height:66px;
+  background:rgba(6,6,6,0.88);
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  backdrop-filter:blur(16px);
 }
-.logo {
-  font-style: italic; font-weight: 900; font-size: 20px;
-  letter-spacing: 0.05em; color: #fff;
-}
-.logo b { color: var(--brown); font-style: normal; }
-.nav-links { display: flex; gap: 36px; list-style: none; }
-.nav-links a {
-  color: rgba(255,255,255,0.6); text-decoration: none;
-  font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; transition: color .2s;
-}
-.nav-links a:hover { color: #fff; }
-.nav-btn {
-  background: var(--blue); color: #fff; border: none;
-  padding: 10px 28px; font-family: inherit; font-weight: 700;
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
-  cursor: pointer; transition: background .2s;
-}
-.nav-btn:hover { background: #254f96; }
+.logo{font-style:italic;font-weight:900;font-size:21px;letter-spacing:0.05em;color:#fff;text-decoration:none}
+.logo-dot{color:#8B6343}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.52);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-btn{background:#1A3A6B;color:#fff;border:none;padding:11px 30px;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.nav-btn:hover{background:#264f96}
 
-/* ── HERO (scroll-pinned) ── */
-#hero { position: relative; height: 500vh; }
+/* ── HERO ── */
+#hero{position:relative;height:500vh}
+.hero-pin{position:sticky;top:0;height:100vh;overflow:hidden}
 
-.hero-pin {
-  position: sticky; top: 0; height: 100vh;
-  overflow: hidden; display: flex; flex-direction: column;
-  align-items: flex-start; justify-content: center;
+/* Dark vignette over entire scene */
+.scene-vignette{
+  position:absolute;inset:0;z-index:4;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(0,0,0,0.55) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.45) 0%, transparent 18%, transparent 72%, rgba(0,0,0,0.8) 100%);
 }
 
-/* Sky */
-.sky-layer {
-  position: absolute; inset: 0;
-  background: linear-gradient(
+/* Sky background — cinematic gradient */
+.sky{
+  position:absolute;inset:0;z-index:0;
+  background:linear-gradient(
     180deg,
-    #0d1820 0%,
-    #1a2d40 15%,
-    #3a2510 50%,
-    #1a0d05 70%,
-    #0a0a0a 100%
+    #060e18 0%,
+    #0f1e2e 10%,
+    #1e2d1e 22%,
+    #3a2810 40%,
+    #5a3a12 52%,
+    #3a1e08 64%,
+    #180e04 78%,
+    #0a0806 100%
   );
-  transition: background 0.1s;
+  transition:background 0.08s linear;
 }
 
-/* Sun glow on horizon */
-.sun-glow {
-  position: absolute;
-  bottom: 32%; left: 50%;
-  transform: translateX(-50%);
-  width: 700px; height: 120px;
-  background: radial-gradient(ellipse at center,
-    rgba(255,140,40,0.35) 0%,
-    rgba(200,80,20,0.15) 40%,
-    transparent 70%
+/* Fleet bg image — static, very dark, sets the mood */
+.bg-fleet{
+  position:absolute;
+  bottom:18%;left:0;width:100%;height:55%;
+  z-index:1;
+  background:url('img/bg-fleet.jpg') center center / cover no-repeat;
+  opacity:0.18;
+  filter:grayscale(0.4);
+}
+
+/* Horizon glow */
+.horizon-glow{
+  position:absolute;bottom:28%;left:50%;transform:translateX(-50%);
+  width:110%;height:200px;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse at center,
+    rgba(255,140,40,0.32) 0%,
+    rgba(180,70,10,0.14) 38%,
+    transparent 68%
   );
-  pointer-events: none;
 }
 
 /* Ground */
-.ground-layer {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 33%;
-  background: linear-gradient(180deg, #100a04 0%, #060402 100%);
+.ground{
+  position:absolute;bottom:0;left:0;width:100%;height:30%;z-index:2;
+  background:linear-gradient(180deg,#100804 0%,#050302 100%);
 }
 
-/* Road lines */
-.road-layer {
-  position: absolute; bottom: 33%; left: 0; width: 100%; height: 3px;
-  background: linear-gradient(90deg,
-    transparent 0%, rgba(139,99,67,0.25) 15%,
-    rgba(139,99,67,0.4) 50%,
-    rgba(139,99,67,0.25) 85%, transparent 100%
-  );
-}
-.road-dashes {
-  position: absolute; bottom: calc(33% + 20px); left: 0; width: 100%; height: 2px;
-  overflow: hidden;
-}
-.road-dashes::after {
-  content: '';
-  position: absolute; top: 0; left: -200px; width: 200%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0px, transparent 60px,
-    rgba(255,255,255,0.08) 60px, rgba(255,255,255,0.08) 120px
-  );
-  animation: dash-move 4s linear infinite;
-}
-@keyframes dash-move { from { transform: translateX(0); } to { transform: translateX(180px); } }
-
-/* Headlight cone */
-.headlight {
-  position: absolute;
-  bottom: 33%;
-  width: 600px; height: 140px;
-  background: linear-gradient(90deg,
-    rgba(220,200,140,0.22) 0%,
-    rgba(220,200,140,0.08) 50%,
+/* Road surface */
+.road{
+  position:absolute;bottom:30%;left:0;width:100%;height:5px;z-index:3;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(160,120,60,0.3) 8%,
+    rgba(200,160,80,0.55) 50%,
+    rgba(160,120,60,0.3) 92%,
     transparent 100%
   );
-  clip-path: polygon(100% 40%, 100% 60%, 0% 100%, 0% 0%);
-  transform-origin: right center;
-  pointer-events: none;
+}
+/* Road glow */
+.road::after{
+  content:'';position:absolute;bottom:-8px;left:10%;width:80%;height:16px;
+  background:radial-gradient(ellipse,rgba(180,140,60,0.18) 0%,transparent 70%);
 }
 
-/* Hero text */
-.hero-text {
-  position: relative; z-index: 10;
-  padding-left: 60px; padding-top: 64px;
-  transition: opacity 0.3s;
+/* Dashed centre line */
+.road-dash{
+  position:absolute;bottom:calc(30% + 18px);left:0;width:100%;height:2px;overflow:hidden;z-index:3;
 }
-.hero-tag {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--brown);
-  margin-bottom: 16px;
+.road-dash::after{
+  content:'';position:absolute;top:0;left:-200px;width:200%;height:100%;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent 70px,rgba(255,255,255,0.06) 70px,rgba(255,255,255,0.06) 140px);
+  animation:road-move 2.8s linear infinite;
 }
-.hero-h1 {
-  font-style: italic; font-weight: 900;
-  font-size: clamp(64px, 8.5vw, 120px);
-  line-height: 0.88;
-  color: #fff;
-  text-shadow: 0 2px 40px rgba(0,0,0,0.8);
+@keyframes road-move{from{transform:translateX(0)}to{transform:translateX(210px)}}
+
+/* ── TRUCK LAYERS ── */
+/* All trucks: position:absolute, bottom aligned to road, JS moves X */
+.truck-img{
+  position:absolute;
+  bottom:30%;
+  left:0;
+  pointer-events:none;
+  transform-origin:left bottom;
+  will-change:transform;
 }
-.hero-h1 .accent { color: var(--blue); }
-.hero-sub {
-  margin-top: 20px;
-  font-size: 13px; font-weight: 600; letter-spacing: 0.18em;
-  text-transform: uppercase; color: rgba(255,255,255,0.45);
+
+/* Far truck — smallest, most faded */
+#t-far{
+  z-index:3;
+  height:12vh;
+  bottom:calc(30% + 2px);
+  filter:brightness(0.28) saturate(0.1) blur(1.2px);
+  opacity:0.7;
+}
+
+/* Mid truck — medium */
+#t-mid{
+  z-index:4;
+  height:20vh;
+  bottom:calc(30% + 1px);
+  filter:brightness(0.42) saturate(0.18) blur(0.4px);
+  opacity:0.82;
+}
+
+/* Main truck — full detail */
+#t-main{
+  z-index:5;
+  height:38vh;
+  bottom:30%;
+  filter:brightness(0.88) contrast(1.08) saturate(0.7);
+}
+
+/* Headlight cone */
+#headlight{
+  position:absolute;
+  bottom:30%;
+  z-index:4;
+  width:680px;height:180px;
+  pointer-events:none;
+  background:linear-gradient(90deg,
+    rgba(230,210,140,0.26) 0%,
+    rgba(230,210,140,0.1) 45%,
+    transparent 100%
+  );
+  clip-path:polygon(100% 32%,100% 68%,0 100%,0 0%);
+  transform-origin:right center;
+  will-change:transform,opacity;
+}
+
+/* SCROLL TEXT overlay on truck (fades as truck moves) */
+.scroll-label{
+  position:absolute;
+  z-index:10;
+  pointer-events:none;
+  transition:opacity 0.1s;
+}
+
+/* ── HERO TEXT ── */
+.hero-text{
+  position:absolute;
+  bottom:34%;left:0;width:100%;
+  padding:0 60px;
+  z-index:8;pointer-events:none;
+  will-change:opacity,transform;
+}
+.hero-eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:0.24em;
+  text-transform:uppercase;color:#8B6343;margin-bottom:14px;
+  text-shadow:0 1px 8px rgba(0,0,0,0.8);
+}
+.hero-h1{
+  font-style:italic;font-weight:900;
+  font-size:clamp(68px,9vw,128px);
+  line-height:0.86;color:#fff;
+  text-shadow:0 2px 48px rgba(0,0,0,0.95),0 1px 16px rgba(0,0,0,0.7);
+}
+.hero-h1 .blue{color:#1A3A6B}
+.hero-sub{
+  margin-top:20px;font-size:12px;font-weight:700;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.38);
+  text-shadow:0 1px 8px rgba(0,0,0,0.8);
 }
 
 /* Scroll cue */
-.scroll-cue {
-  position: absolute; bottom: 36px; right: 52px;
-  display: flex; align-items: center; gap: 14px;
-  z-index: 10;
+.scroll-cue{
+  position:absolute;bottom:30px;right:52px;z-index:8;
+  display:flex;align-items:center;gap:14px;
+  pointer-events:none;will-change:opacity;
 }
-.scroll-cue span {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
-  text-transform: uppercase; color: rgba(255,255,255,0.3);
-}
-.scroll-line {
-  width: 1px; height: 48px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent);
-  animation: line-pulse 2s ease-in-out infinite;
-}
-@keyframes line-pulse {
-  0%, 100% { opacity: 0.3; transform: scaleY(1); }
-  50% { opacity: 1; transform: scaleY(1.1); }
-}
+.sc-text{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.26)}
+.sc-line{width:1px;height:50px;background:linear-gradient(180deg,rgba(255,255,255,0.28),transparent);animation:sc-pulse 2s ease-in-out infinite}
+@keyframes sc-pulse{0%,100%{opacity:0.3}50%{opacity:1}}
 
-/* ── THE TRUCK ── */
-#truck-container {
-  position: absolute;
-  bottom: 26%;
-  left: 0;
-  width: 100%;
-  z-index: 5;
-  pointer-events: none;
-}
-#truck-svg-wrap {
-  /* JS will control translateX */
-  display: inline-block;
-  white-space: nowrap;
-}
-
-/* ── SECTIONS ── */
-.section {
-  position: relative;
-  background: var(--dark);
-  z-index: 1;
-}
+/* ── CONTENT SECTIONS ── */
+section.content{background:#0a0a0a;position:relative;z-index:10}
 
 /* Stats */
-#stats {
-  padding: 100px 60px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-  border-top: 1px solid rgba(255,255,255,0.06);
+#s-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+  padding:110px 60px;
+  border-top:1px solid rgba(255,255,255,0.07);
+  align-items:center;
 }
-.stats-left .tag {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--brown); margin-bottom: 18px;
-}
-.stats-left h2 {
-  font-style: italic; font-weight: 900;
-  font-size: clamp(42px, 5vw, 72px);
-  line-height: 0.95; color: #fff; margin-bottom: 24px;
-}
-.stats-left p {
-  font-size: 15px; line-height: 1.75;
-  color: rgba(255,255,255,0.45); max-width: 440px;
-}
-.stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-}
-.stat-box {
-  background: #111;
-  padding: 36px 28px;
-  border-left: 3px solid var(--blue);
-}
-.stat-n {
-  font-style: italic; font-weight: 900;
-  font-size: 52px; color: var(--blue); line-height: 1;
-}
-.stat-l {
-  margin-top: 8px; font-size: 11px; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-}
+.tag{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#8B6343;margin-bottom:18px}
+.sh2{font-style:italic;font-weight:900;font-size:clamp(44px,5vw,72px);line-height:0.94;color:#fff;margin-bottom:24px}
+.sp{font-size:15px;line-height:1.8;color:rgba(255,255,255,0.42);max-width:440px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.stat-box{background:#0f0f0f;padding:38px 28px;border-left:3px solid var(--c,#1A3A6B)}
+.stat-n{font-style:italic;font-weight:900;font-size:54px;color:var(--c,#1A3A6B);line-height:1}
+.stat-l{margin-top:8px;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3)}
 
 /* Services */
-#services {
-  padding: 100px 60px;
-  background: #0d0d0d;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-#services .tag {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--brown); margin-bottom: 16px;
-}
-#services h2 {
-  font-style: italic; font-weight: 900;
-  font-size: clamp(42px, 5vw, 72px);
-  line-height: 0.95; color: #fff; margin-bottom: 64px;
-}
-.svc-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-}
-.svc-card {
-  background: #111; padding: 44px 32px;
-  border-top: 3px solid transparent;
-  transition: border-color .25s, background .25s;
-}
-.svc-card:hover { border-top-color: var(--blue); background: #141414; }
-.svc-ico {
-  width: 44px; height: 44px; margin-bottom: 28px;
-  display: flex; align-items: center; justify-content: center;
-}
-.svc-ico svg { width: 44px; height: 44px; }
-.svc-name {
-  font-style: italic; font-weight: 900;
-  font-size: 22px; color: #fff; margin-bottom: 12px;
-}
-.svc-desc {
-  font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.4);
-}
+#s-services{padding:110px 60px;background:#0c0c0c;border-top:1px solid rgba(255,255,255,0.05)}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:64px}
+.svc-card{background:#0f0f0f;padding:46px 34px;border-top:3px solid transparent;transition:border-color .25s,background .25s;cursor:default}
+.svc-card:hover{border-top-color:#1A3A6B;background:#111}
+.svc-ico{margin-bottom:26px}
+.svc-ico svg{width:42px;height:42px}
+.svc-name{font-style:italic;font-weight:900;font-size:21px;color:#fff;margin-bottom:12px}
+.svc-desc{font-size:14px;line-height:1.65;color:rgba(255,255,255,0.38)}
 
 /* CTA */
-#cta {
-  padding: 100px 60px;
-  background: var(--blue);
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 60px;
-  border-top: 3px solid rgba(255,255,255,0.1);
+#s-cta{
+  padding:110px 60px;background:#1A3A6B;
+  display:flex;align-items:center;justify-content:space-between;gap:60px;
+  border-top:3px solid rgba(255,255,255,0.12);
 }
-#cta h2 {
-  font-style: italic; font-weight: 900;
-  font-size: clamp(42px, 5vw, 72px);
-  line-height: 0.92; color: #fff;
-}
-#cta h2 span { color: rgba(255,255,255,0.3); }
-.cta-btn {
-  flex-shrink: 0;
-  background: #fff; color: var(--blue); border: none;
-  padding: 20px 48px;
-  font-family: inherit; font-style: italic; font-weight: 900;
-  font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase;
-  cursor: pointer; transition: transform .2s;
-  white-space: nowrap;
-}
-.cta-btn:hover { transform: scale(1.04); }
+#s-cta h2{font-style:italic;font-weight:900;font-size:clamp(44px,5vw,72px);line-height:0.92;color:#fff}
+#s-cta h2 em{color:rgba(255,255,255,0.28);font-style:italic}
+.cta-btn{flex-shrink:0;background:#fff;color:#1A3A6B;border:none;padding:22px 52px;font-family:inherit;font-style:italic;font-weight:900;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:transform .18s;white-space:nowrap}
+.cta-btn:hover{transform:scale(1.04)}
 
 /* Footer */
-footer {
-  background: #080808;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  padding: 44px 60px;
-  display: flex; align-items: center;
-  justify-content: space-between; flex-wrap: wrap; gap: 20px;
-}
-.foot-logo { font-style: italic; font-weight: 900; font-size: 16px; color: #fff; }
-.foot-logo b { color: var(--brown); }
-.foot-links { display: flex; gap: 28px; }
-.foot-links a {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; color: rgba(255,255,255,0.3);
-  text-decoration: none; transition: color .2s;
-}
-.foot-links a:hover { color: #fff; }
-.foot-copy {
-  font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 0.06em;
-}
+footer{background:#070707;border-top:1px solid rgba(255,255,255,0.06);padding:44px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.foot-logo{font-style:italic;font-weight:900;font-size:17px;color:#fff}
+.foot-dot{color:#8B6343}
+.foot-links{display:flex;gap:28px}
+.foot-links a{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);text-decoration:none;transition:color .2s}
+.foot-links a:hover{color:#fff}
+.foot-copy{font-size:11px;color:rgba(255,255,255,0.18);letter-spacing:0.06em}
 
-/* Responsive */
-@media (max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hero-text { padding-left: 24px; }
-  #stats { grid-template-columns: 1fr; padding: 64px 24px; gap: 48px; }
-  #services { padding: 64px 24px; }
-  .svc-grid { grid-template-columns: 1fr; }
-  #cta { flex-direction: column; padding: 64px 24px; text-align: center; }
-  footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+/* Mobile */
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hero-text{padding:0 24px}
+  .hero-h1{font-size:clamp(52px,13vw,80px)}
+  #s-stats{grid-template-columns:1fr;padding:70px 24px;gap:44px}
+  #s-services{padding:70px 24px}
+  .svc-grid{grid-template-columns:1fr}
+  #s-cta{flex-direction:column;padding:70px 24px;text-align:center}
+  footer{padding:32px 24px;flex-direction:column;align-items:flex-start}
+  #t-main{height:22vh}
+  #t-mid{height:13vh}
+  #t-far{height:8vh}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <div class="logo">JNB<b>.</b>EXPRESS</div>
+  <div class="logo">JNB<span class="logo-dot">.</span>EXPRESS</div>
   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#stats">Coverage</a></li>
-    <li><a href="#cta">About</a></li>
-    <li><a href="#cta">Contact</a></li>
+    <li><a href="#s-services">Services</a></li>
+    <li><a href="#s-stats">Coverage</a></li>
+    <li><a href="#s-cta">Contact</a></li>
   </ul>
   <button class="nav-btn">Book Now</button>
 </nav>
 
-<!-- HERO -->
+<!-- ══ HERO ══ -->
 <section id="hero">
   <div class="hero-pin" id="heroPin">
-    <div class="sky-layer" id="skyLayer"></div>
-    <div class="sun-glow"></div>
-    <div class="ground-layer"></div>
-    <div class="road-layer"></div>
-    <div class="road-dashes"></div>
-    <div class="headlight" id="headlight"></div>
 
+    <div class="sky" id="sky"></div>
+    <div class="bg-fleet"></div>
+    <div class="horizon-glow" id="sunGlow"></div>
+    <div class="ground"></div>
+    <div class="road"></div>
+    <div class="road-dash"></div>
+
+    <!-- Headlight beam -->
+    <div id="headlight"></div>
+
+    <!-- FAR truck (background, barely visible silhouette) -->
+    <img id="t-far" class="truck-img" src="img/truck-far.jpg" alt="">
+
+    <!-- MID truck -->
+    <img id="t-mid" class="truck-img" src="img/truck-mid.jpg" alt="">
+
+    <!-- MAIN truck -->
+    <img id="t-main" class="truck-img" src="img/truck-main.jpg" alt="">
+
+    <!-- Hero text -->
     <div class="hero-text" id="heroText">
-      <div class="hero-tag">Tbilisi Premium Courier · 2026</div>
-      <h1 class="hero-h1">WE MOVE<br><span class="accent">TBILISI.</span></h1>
-      <p class="hero-sub">Same-Day Delivery &nbsp;·&nbsp; Every District</p>
+      <div class="hero-eyebrow">Tbilisi Premium Courier &nbsp;·&nbsp; 2026</div>
+      <h1 class="hero-h1">WE MOVE<br><span class="blue">TBILISI.</span></h1>
+      <p class="hero-sub">Same-Day Delivery &nbsp;·&nbsp; Every District &nbsp;·&nbsp; Flat-Rate Zones</p>
     </div>
 
+    <!-- Scroll cue -->
     <div class="scroll-cue" id="scrollCue">
-      <span>Scroll to explore</span>
-      <div class="scroll-line"></div>
+      <span class="sc-text">Scroll to explore</span>
+      <div class="sc-line"></div>
     </div>
 
-    <!-- TRUCK -->
-    <div id="truck-container">
-      <div id="truck-svg-wrap">
-        <svg id="truckSVG"
-          viewBox="0 0 1400 260"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMidYMax meet">
-
-          <!-- ═══ TRAILER ═══ -->
-          <!-- Main trailer body -->
-          <rect x="0" y="20" width="1020" height="180" rx="4" fill="#141414" stroke="#2a2a2a" stroke-width="1.5"/>
-          <!-- Blue top stripe -->
-          <rect x="0" y="20" width="1020" height="16" rx="3" fill="#1A3A6B"/>
-          <!-- Brown accent stripe -->
-          <rect x="0" y="34" width="1020" height="6" fill="#8B6343"/>
-          <!-- Panel dividers -->
-          <line x1="170" y1="24" x2="170" y2="200" stroke="#222" stroke-width="1.5"/>
-          <line x1="340" y1="24" x2="340" y2="200" stroke="#222" stroke-width="1.5"/>
-          <line x1="510" y1="24" x2="510" y2="200" stroke="#222" stroke-width="1.5"/>
-          <line x1="680" y1="24" x2="680" y2="200" stroke="#222" stroke-width="1.5"/>
-          <line x1="850" y1="24" x2="850" y2="200" stroke="#222" stroke-width="1.5"/>
-          <!-- JNB text on trailer side -->
-          <text x="510" y="130" text-anchor="middle"
-            font-family="'Exo 2', Arial, sans-serif" font-style="italic" font-weight="900"
-            font-size="72" fill="rgba(255,255,255,0.055)" letter-spacing="8">
-            JNB EXPRESS
-          </text>
-          <!-- SCROLL TO EXPLORE text -->
-          <text x="510" y="148" text-anchor="middle"
-            font-family="'Exo 2', Arial, sans-serif" font-weight="700"
-            font-size="13" fill="rgba(255,255,255,0.28)" letter-spacing="8">
-            SCROLL TO EXPLORE
-          </text>
-          <!-- Bottom chassis rail -->
-          <rect x="0" y="196" width="1020" height="10" rx="2" fill="#0f0f0f" stroke="#1a1a1a" stroke-width="1"/>
-          <!-- Rear door seam -->
-          <line x1="2" y1="40" x2="2" y2="200" stroke="#444" stroke-width="3"/>
-          <!-- Rear marker lights -->
-          <rect x="1010" y="26" width="7" height="12" rx="2" fill="#cc4400" opacity="0.9"/>
-          <rect x="1010" y="42" width="7" height="10" rx="2" fill="#aa0000" opacity="0.7"/>
-          <!-- Trailer underframe -->
-          <rect x="80" y="206" width="860" height="14" rx="3" fill="#0d0d0d"/>
-          <!-- Rear bogie assembly -->
-          <rect x="780" y="206" width="200" height="20" rx="4" fill="#111" stroke="#1e1e1e" stroke-width="1"/>
-          <!-- Rear wheels (dual axle) -->
-          <g transform="translate(820,234)">
-            <circle r="22" fill="#0f0f0f" stroke="#333" stroke-width="2"/>
-            <circle r="14" fill="#141414"/>
-            <circle r="5" fill="#222"/>
-            <line x1="0" y1="-14" x2="0" y2="14" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-14" y1="0" x2="14" y2="0" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-10" y1="-10" x2="10" y2="10" stroke="#222" stroke-width="1.5"/>
-            <line x1="10" y1="-10" x2="-10" y2="10" stroke="#222" stroke-width="1.5"/>
-          </g>
-          <g transform="translate(870,234)">
-            <circle r="22" fill="#0f0f0f" stroke="#333" stroke-width="2"/>
-            <circle r="14" fill="#141414"/>
-            <circle r="5" fill="#222"/>
-            <line x1="0" y1="-14" x2="0" y2="14" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-14" y1="0" x2="14" y2="0" stroke="#2a2a2a" stroke-width="2"/>
-          </g>
-          <g transform="translate(930,234)">
-            <circle r="22" fill="#0f0f0f" stroke="#333" stroke-width="2"/>
-            <circle r="14" fill="#141414"/>
-            <circle r="5" fill="#222"/>
-            <line x1="0" y1="-14" x2="0" y2="14" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-14" y1="0" x2="14" y2="0" stroke="#2a2a2a" stroke-width="2"/>
-          </g>
-          <g transform="translate(980,234)">
-            <circle r="22" fill="#0f0f0f" stroke="#333" stroke-width="2"/>
-            <circle r="14" fill="#141414"/>
-            <circle r="5" fill="#222"/>
-            <line x1="0" y1="-14" x2="0" y2="14" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-14" y1="0" x2="14" y2="0" stroke="#2a2a2a" stroke-width="2"/>
-          </g>
-          <!-- Fifth wheel plate -->
-          <rect x="1000" y="194" width="50" height="18" rx="3" fill="#111" stroke="#222" stroke-width="1"/>
-
-          <!-- ═══ CAB ═══ -->
-          <!-- Cab body main -->
-          <path d="M1040,210 L1040,70 Q1040,40 1065,28 L1250,18 Q1300,14 1330,50 L1370,100 L1380,210 Z"
-            fill="#141414" stroke="#2a2a2a" stroke-width="1.5"/>
-          <!-- Cab roof panel - blue -->
-          <path d="M1065,28 L1250,18 Q1295,14 1325,46 L1100,46 Q1080,42 1065,28 Z"
-            fill="#1A3A6B"/>
-          <!-- Brown stripe on cab -->
-          <rect x="1040" y="46" width="340" height="7" fill="#8B6343"/>
-          <!-- Windshield -->
-          <path d="M1068,30 L1245,20 Q1288,16 1318,48 L1108,48 Q1086,44 1068,30 Z"
-            fill="#0d1a2e" opacity="0.92"/>
-          <!-- Windshield tint highlight -->
-          <path d="M1090,32 L1235,23 Q1272,20 1298,44 L1118,44 Q1098,41 1090,32 Z"
-            fill="rgba(26,58,107,0.35)"/>
-          <!-- Left side window -->
-          <path d="M1040,54 L1072,54 L1072,110 L1040,104 Z"
-            fill="#0d1a2e" opacity="0.85"/>
-          <!-- Door panel -->
-          <line x1="1145" y1="53" x2="1145" y2="205" stroke="#1e1e1e" stroke-width="2"/>
-          <!-- Door handle -->
-          <rect x="1155" y="148" width="28" height="6" rx="3" fill="#1e1e1e" stroke="#333" stroke-width="1"/>
-          <!-- JNB door badge -->
-          <rect x="1158" y="108" width="100" height="44" rx="3" fill="#1A3A6B" opacity="0.65"/>
-          <text x="1208" y="136" text-anchor="middle"
-            font-family="'Exo 2', Arial, sans-serif" font-style="italic" font-weight="900"
-            font-size="24" fill="rgba(255,255,255,0.85)">JNB</text>
-          <!-- Exhaust stacks -->
-          <rect x="1330" y="8" width="12" height="68" rx="3" fill="#0f0f0f" stroke="#222" stroke-width="1"/>
-          <rect x="1346" y="12" width="11" height="62" rx="3" fill="#0f0f0f" stroke="#222" stroke-width="1"/>
-          <!-- Smoke wisps -->
-          <ellipse cx="1336" cy="5" rx="6" ry="4" fill="#141414" opacity="0.5"/>
-          <ellipse cx="1339" cy="1" rx="4" ry="3" fill="#141414" opacity="0.3"/>
-          <ellipse cx="1352" cy="9" rx="5" ry="3.5" fill="#141414" opacity="0.4"/>
-          <!-- Headlight housing -->
-          <rect x="1358" y="118" width="24" height="16" rx="2" fill="#f5e8a0" opacity="0.95"/>
-          <rect x="1360" y="136" width="22" height="10" rx="2" fill="#cc4400" opacity="0.75"/>
-          <!-- Grille -->
-          <rect x="1356" y="160" width="28" height="40" rx="2" fill="#0f0f0f" stroke="#222" stroke-width="1"/>
-          <line x1="1362" y1="162" x2="1362" y2="198" stroke="#1a1a1a" stroke-width="1.5"/>
-          <line x1="1368" y1="162" x2="1368" y2="198" stroke="#1a1a1a" stroke-width="1.5"/>
-          <line x1="1374" y1="162" x2="1374" y2="198" stroke="#1a1a1a" stroke-width="1.5"/>
-          <line x1="1356" y1="170" x2="1384" y2="170" stroke="#1a1a1a" stroke-width="1.5"/>
-          <line x1="1356" y1="180" x2="1384" y2="180" stroke="#1a1a1a" stroke-width="1.5"/>
-          <line x1="1356" y1="190" x2="1384" y2="190" stroke="#1a1a1a" stroke-width="1.5"/>
-          <!-- Bumper -->
-          <rect x="1038" y="202" width="348" height="18" rx="3" fill="#0f0f0f" stroke="#1e1e1e" stroke-width="1"/>
-          <!-- Step board -->
-          <rect x="1046" y="185" width="60" height="12" rx="2" fill="#111" stroke="#1e1e1e" stroke-width="1"/>
-          <!-- Cab front wheels -->
-          <g transform="translate(1110,236)">
-            <circle r="24" fill="#0f0f0f" stroke="#333" stroke-width="2"/>
-            <circle r="15" fill="#141414"/>
-            <circle r="6" fill="#222"/>
-            <line x1="0" y1="-15" x2="0" y2="15" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-15" y1="0" x2="15" y2="0" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-11" y1="-11" x2="11" y2="11" stroke="#222" stroke-width="1.5"/>
-            <line x1="11" y1="-11" x2="-11" y2="11" stroke="#222" stroke-width="1.5"/>
-          </g>
-          <g transform="translate(1310,236)">
-            <circle r="24" fill="#0f0f0f" stroke="#333" stroke-width="2"/>
-            <circle r="15" fill="#141414"/>
-            <circle r="6" fill="#222"/>
-            <line x1="0" y1="-15" x2="0" y2="15" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-15" y1="0" x2="15" y2="0" stroke="#2a2a2a" stroke-width="2"/>
-            <line x1="-11" y1="-11" x2="11" y2="11" stroke="#222" stroke-width="1.5"/>
-            <line x1="11" y1="-11" x2="-11" y2="11" stroke="#222" stroke-width="1.5"/>
-          </g>
-          <!-- Mirror arm left -->
-          <rect x="1032" y="68" width="20" height="4" rx="2" fill="#1a1a1a"/>
-          <rect x="1018" y="62" width="16" height="30" rx="3" fill="#111" stroke="#252525" stroke-width="1"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<section class="section" id="stats">
-  <div style="padding: 100px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; border-top: 1px solid rgba(255,255,255,0.06);">
-    <div>
-      <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#8B6343;margin-bottom:18px;">Coverage Network</div>
-      <h2 style="font-style:italic;font-weight:900;font-size:clamp(42px,5vw,72px);line-height:0.95;color:#fff;margin-bottom:24px;">Tbilisi.<br>City-wide.</h2>
-      <p style="font-size:15px;line-height:1.75;color:rgba(255,255,255,0.45);max-width:440px;">JNB Express covers every district in Tbilisi with same-day delivery. We operate during peak business hours so your parcels arrive before the day ends — not the day after.</p>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
-      <div style="background:#111;padding:36px 28px;border-left:3px solid #1A3A6B;">
-        <div style="font-style:italic;font-weight:900;font-size:52px;color:#1A3A6B;line-height:1;">2H</div>
-        <div style="margin-top:8px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);">Avg Delivery Time</div>
-      </div>
-      <div style="background:#111;padding:36px 28px;border-left:3px solid #1A3A6B;">
-        <div style="font-style:italic;font-weight:900;font-size:52px;color:#1A3A6B;line-height:1;">9+</div>
-        <div style="margin-top:8px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);">Districts Covered</div>
-      </div>
-      <div style="background:#111;padding:36px 28px;border-left:3px solid #8B6343;">
-        <div style="font-style:italic;font-weight:900;font-size:52px;color:#8B6343;line-height:1;">8₾</div>
-        <div style="margin-top:8px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);">Zone 1 Flat Rate</div>
-      </div>
-      <div style="background:#111;padding:36px 28px;border-left:3px solid #8B6343;">
-        <div style="font-style:italic;font-weight:900;font-size:52px;color:#8B6343;line-height:1;">'26</div>
-        <div style="margin-top:8px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);">Launch Year</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="section" id="services" style="padding:100px 60px;background:#0d0d0d;border-top:1px solid rgba(255,255,255,0.05);">
-  <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#8B6343;margin-bottom:16px;">What We Move</div>
-  <h2 style="font-style:italic;font-weight:900;font-size:clamp(42px,5vw,72px);line-height:0.95;color:#fff;margin-bottom:64px;">Built for<br>every load.</h2>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;">
-
-    <div style="background:#111;padding:44px 32px;border-top:3px solid #1A3A6B;">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" style="margin-bottom:24px;">
-        <rect x="4" y="12" width="30" height="22" rx="2" stroke="#1A3A6B" stroke-width="2"/>
-        <path d="M34 20h6v10l-6 4V20Z" stroke="#8B6343" stroke-width="2"/>
-        <circle cx="10" cy="36" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-        <circle cx="28" cy="36" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-      </svg>
-      <div style="font-style:italic;font-weight:900;font-size:22px;color:#fff;margin-bottom:12px;">Express Delivery</div>
-      <div style="font-size:14px;line-height:1.65;color:rgba(255,255,255,0.4);">Same-day door-to-door across Tbilisi. Flat-rate zone pricing. No hidden fees, no surprises.</div>
-    </div>
-
-    <div style="background:#111;padding:44px 32px;border-top:3px solid transparent;transition:border-color .25s;" onmouseover="this.style.borderTopColor='#1A3A6B'" onmouseout="this.style.borderTopColor='transparent'">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" style="margin-bottom:24px;">
-        <rect x="8" y="6" width="28" height="32" rx="2" stroke="#1A3A6B" stroke-width="2"/>
-        <line x1="14" y1="16" x2="30" y2="16" stroke="#8B6343" stroke-width="2"/>
-        <line x1="14" y1="22" x2="30" y2="22" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-        <line x1="14" y1="28" x2="24" y2="28" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-      </svg>
-      <div style="font-style:italic;font-weight:900;font-size:22px;color:#fff;margin-bottom:12px;">Business Courier</div>
-      <div style="font-size:14px;line-height:1.65;color:rgba(255,255,255,0.4);">Dedicated routes for offices, e-commerce, and retail. Volume pricing and account invoicing available.</div>
-    </div>
-
-    <div style="background:#111;padding:44px 32px;border-top:3px solid transparent;transition:border-color .25s;" onmouseover="this.style.borderTopColor='#1A3A6B'" onmouseout="this.style.borderTopColor='transparent'">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" style="margin-bottom:24px;">
-        <circle cx="22" cy="22" r="16" stroke="#1A3A6B" stroke-width="2"/>
-        <path d="M22 6v16l9 5" stroke="#8B6343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <div style="font-style:italic;font-weight:900;font-size:22px;color:#fff;margin-bottom:12px;">Scheduled Runs</div>
-      <div style="font-size:14px;line-height:1.65;color:rgba(255,255,255,0.4);">Regular timed pickups for recurring clients. Lock your slot — we handle the rest, every day.</div>
-    </div>
+    <!-- Dark vignette on top of everything -->
+    <div class="scene-vignette"></div>
 
   </div>
 </section>
 
-<!-- CTA -->
-<section id="cta" style="padding:100px 60px;background:#1A3A6B;display:flex;align-items:center;justify-content:space-between;gap:60px;border-top:3px solid rgba(255,255,255,0.1);">
-  <h2 style="font-style:italic;font-weight:900;font-size:clamp(42px,5vw,72px);line-height:0.92;color:#fff;">
-    Ready to move<br><span style="color:rgba(255,255,255,0.3);">with JNB?</span>
-  </h2>
+<!-- ══ STATS ══ -->
+<section class="content" id="s-stats">
+  <div class="tag">Coverage Network</div>
+  <h2 class="sh2">Tbilisi.<br>City-wide.</h2>
+  <p class="sp">JNB Express covers every district in Tbilisi with same-day delivery. We operate during peak business hours so your parcels arrive before the day ends — not the day after.</p>
+  <div style="margin-top:0" id="stats-right"><!-- spacer --></div>
+  <div class="stat-grid" style="grid-column:2;grid-row:1/4;align-self:center">
+    <div class="stat-box" style="--c:#1A3A6B"><div class="stat-n">2H</div><div class="stat-l">Avg Delivery Time</div></div>
+    <div class="stat-box" style="--c:#1A3A6B"><div class="stat-n">9+</div><div class="stat-l">Districts Covered</div></div>
+    <div class="stat-box" style="--c:#8B6343"><div class="stat-n">8₾</div><div class="stat-l">Zone 1 Flat Rate</div></div>
+    <div class="stat-box" style="--c:#8B6343"><div class="stat-n">'26</div><div class="stat-l">Launch Year</div></div>
+  </div>
+</section>
+
+<!-- ══ SERVICES ══ -->
+<section class="content" id="s-services">
+  <div class="tag">What We Move</div>
+  <h2 class="sh2">Built for<br>every load.</h2>
+  <div class="svc-grid">
+    <div class="svc-card" style="border-top-color:#1A3A6B">
+      <div class="svc-ico"><svg viewBox="0 0 42 42" fill="none"><rect x="3" y="11" width="28" height="22" rx="2" stroke="#1A3A6B" stroke-width="2"/><path d="M31 19h7v10l-7 4V19Z" stroke="#8B6343" stroke-width="2"/><circle cx="9" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><circle cx="27" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg></div>
+      <div class="svc-name">Express Delivery</div>
+      <div class="svc-desc">Same-day door-to-door across Tbilisi. Flat-rate zone pricing. No hidden fees, no surprises.</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ico"><svg viewBox="0 0 42 42" fill="none"><rect x="7" y="5" width="28" height="32" rx="2" stroke="#1A3A6B" stroke-width="2"/><line x1="13" y1="15" x2="29" y2="15" stroke="#8B6343" stroke-width="2"/><line x1="13" y1="21" x2="29" y2="21" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><line x1="13" y1="27" x2="23" y2="27" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg></div>
+      <div class="svc-name">Business Courier</div>
+      <div class="svc-desc">Dedicated routes for offices, e-commerce, and retail. Volume pricing and account invoicing.</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ico"><svg viewBox="0 0 42 42" fill="none"><circle cx="21" cy="21" r="16" stroke="#1A3A6B" stroke-width="2"/><path d="M21 5v16l9 5" stroke="#8B6343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="svc-name">Scheduled Runs</div>
+      <div class="svc-desc">Regular timed pickups for recurring clients. Lock your slot — we handle the rest every day.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="content" id="s-cta">
+  <h2>Ready to move<br><em>with JNB?</em></h2>
   <button class="cta-btn">Get a Quote &rarr;</button>
 </section>
 
-<!-- FOOTER -->
+<!-- ══ FOOTER ══ -->
 <footer>
-  <div style="font-style:italic;font-weight:900;font-size:16px;color:#fff;">JNB<span style="color:#8B6343;">.</span>EXPRESS</div>
-  <div style="display:flex;gap:28px;">
-    <a href="#services" style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);text-decoration:none;">Services</a>
-    <a href="#stats" style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);text-decoration:none;">Coverage</a>
-    <a href="#cta" style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);text-decoration:none;">Contact</a>
+  <div class="foot-logo">JNB<span class="foot-dot">.</span>EXPRESS</div>
+  <div class="foot-links">
+    <a href="#s-services">Services</a>
+    <a href="#s-stats">Coverage</a>
+    <a href="#s-cta">Contact</a>
   </div>
-  <div style="font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.06em;">&copy; 2026 JNB Express &mdash; Ninth Protocol O&Uuml;. Tbilisi, Georgia.</div>
+  <div class="foot-copy">&copy; 2026 JNB Express &mdash; Ninth Protocol O&Uuml;. Tbilisi, Georgia.</div>
 </footer>
 
 <script>
-(function() {
-  var hero = document.getElementById('hero');
-  var pin = document.getElementById('heroPin');
-  var wrap = document.getElementById('truck-svg-wrap');
-  var svg = document.getElementById('truckSVG');
-  var heroText = document.getElementById('heroText');
+(function(){
+  var hero      = document.getElementById('hero');
+  var sky       = document.getElementById('sky');
+  var sunGlow   = document.getElementById('sunGlow');
+  var heroText  = document.getElementById('heroText');
   var scrollCue = document.getElementById('scrollCue');
   var headlight = document.getElementById('headlight');
-  var skyLayer = document.getElementById('skyLayer');
 
-  // Set SVG to fill viewport width, maintain aspect ratio
-  function sizeTruck() {
-    var vw = window.innerWidth;
-    var svgW = vw * 1.05; // truck is slightly wider than viewport
-    svg.style.width = svgW + 'px';
-    svg.style.height = 'auto';
-    svg.style.display = 'block';
+  // Three truck elements with parallax multipliers
+  var layers = [
+    { el: document.getElementById('t-far'),  speed: 0.48, offsetFrac: 0.35 },
+    { el: document.getElementById('t-mid'),  speed: 0.70, offsetFrac: 0.18 },
+    { el: document.getElementById('t-main'), speed: 1.00, offsetFrac: 0.02 }
+  ];
+
+  var vw, vh, initialized = false;
+
+  function setup() {
+    vw = window.innerWidth;
+    vh = window.innerHeight;
+
+    layers.forEach(function(L) {
+      var imgW = L.el.offsetWidth || (vh * 0.38 * 2); // estimate width from height
+      // Start: off right edge with stagger
+      L.startX = vw + vw * L.offsetFrac;
+      // End: fully off left edge
+      L.endX = -(imgW + 60);
+    });
+    initialized = true;
   }
 
-  sizeTruck();
-  window.addEventListener('resize', sizeTruck);
+  function lerp(a, b, t){ return a + (b - a) * t; }
 
   function update() {
-    var heroRect = hero.getBoundingClientRect();
-    var heroH = hero.offsetHeight;
-    var vh = window.innerHeight;
-    var scrolled = -heroRect.top;
-    var total = heroH - vh;
-    var p = Math.max(0, Math.min(1, scrolled / total));
+    if (!initialized) setup();
 
-    // Truck starts at right edge, drives left
-    // At p=0: right edge of truck is at right edge of screen
-    // At p=1: left edge of truck is off the left of the screen
-    var vw = window.innerWidth;
-    var svgW = parseFloat(svg.style.width) || vw * 1.05;
-    var startX = vw - svgW + (vw * 0.12); // truck starts mostly visible
-    var endX = -svgW - 80; // fully off left
-    var x = startX + (endX - startX) * p;
-    wrap.style.transform = 'translateX(' + x + 'px)';
+    var scrolled = window.pageYOffset;
+    var heroH    = hero.offsetHeight;
+    var p = Math.max(0, Math.min(1, scrolled / (heroH - vh)));
 
-    // Headlight follows truck — positioned at cab front
-    var cabFrontX = x + svgW * 0.99; // far right of SVG = headlight
-    headlight.style.right = 'auto';
-    headlight.style.left = (cabFrontX - 580) + 'px';
-    headlight.style.opacity = Math.max(0, 1 - p * 2).toString();
+    // Move trucks
+    layers.forEach(function(L) {
+      var x = lerp(L.startX, L.endX, p * L.speed / 1.0);
+      // clamp so faster trucks don't overshoot before slower ones finish
+      x = Math.max(L.endX, Math.min(L.startX, x));
+      L.el.style.transform = 'translateX(' + x + 'px)';
+    });
 
-    // Fade hero text as truck drives
-    var textFade = Math.max(0, 1 - p * 2.5);
-    heroText.style.opacity = textFade.toString();
-    scrollCue.style.opacity = Math.max(0, textFade - 0.2).toString();
+    // Headlight follows main truck leading edge
+    var mainL  = layers[2];
+    var mainX  = lerp(mainL.startX, mainL.endX, p);
+    var mainW  = mainL.el.offsetWidth || 900;
+    headlight.style.left  = (mainX + mainW - 90) + 'px';
+    headlight.style.opacity = Math.max(0, 1 - p * 2.2).toString();
 
-    // Sky shifts from dawn to dusk as truck passes
-    var r = Math.round(13 + p * 30);
-    var g = Math.round(24 + p * 10);
-    var b = Math.round(32 - p * 15);
-    var r2 = Math.round(58 + p * 30);
-    var g2 = Math.round(37 - p * 15);
-    var b2 = Math.round(16 - p * 8);
-    skyLayer.style.background = [
+    // Fade hero text
+    var fade = Math.max(0, 1 - p * 2.6);
+    heroText.style.opacity  = fade.toString();
+    scrollCue.style.opacity = Math.max(0, fade - 0.15).toString();
+
+    // Sky gradient shift: cool dawn → warm dusk → dark
+    var r0 = Math.round(6  + p * 22);
+    var g0 = Math.round(14 + p * 6);
+    var b0 = Math.round(24 - p * 12);
+    var r1 = Math.round(30 + p * 38);
+    var g1 = Math.round(40 + p * 6);
+    var b1 = Math.round(30 - p * 20);
+    var r2 = Math.round(58 + p * 34);
+    var g2 = Math.round(38 - p * 16);
+    var b2 = Math.round(12 - p * 6);
+    sky.style.background = [
       'linear-gradient(180deg,',
-      'rgb(' + r + ',' + g + ',' + b + ') 0%,',
-      'rgb(' + r2 + ',' + g2 + ',' + b2 + ') 45%,',
-      '#1a0d05 70%,',
-      '#0a0a0a 100%)'
-    ].join(' ');
+      'rgb('+r0+','+g0+','+b0+') 0%,',
+      'rgb('+r1+','+g1+','+b1+') 14%,',
+      'rgb('+r2+','+g2+','+b2+') 50%,',
+      '#2a1004 66%,',
+      '#0e0804 80%,',
+      '#060402 100%)'
+    ].join('');
+
+    // Sun glow fades
+    sunGlow.style.opacity = Math.max(0, 1 - p * 1.8).toString();
   }
 
+  // Wait for images to load before setup
+  window.addEventListener('load', function(){
+    setup();
+    update();
+  });
+
   window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', function(){ setup(); update(); });
+
+  // Run immediately too
+  setup();
   update();
 })();
 </script>
+
 </body>
 </html>
