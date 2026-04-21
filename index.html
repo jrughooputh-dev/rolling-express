@@ -9,133 +9,213 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{background:#0a0a0a;color:#fff;font-family:'Exo 2','Arial Black',Arial,sans-serif;overflow-x:hidden}
 
+/* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;width:100%;z-index:300;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 52px;height:66px;
-  background:rgba(6,6,6,0.88);
+  background:rgba(6,6,6,0.9);
   border-bottom:1px solid rgba(255,255,255,0.07);
-  backdrop-filter:blur(16px);
+  backdrop-filter:blur(18px);
 }
 .logo{font-style:italic;font-weight:900;font-size:21px;letter-spacing:0.05em;color:#fff}
-.logo-dot{color:#8B6343}
+.logo b{color:#8B6343;font-style:normal;font-weight:900}
 .nav-links{display:flex;gap:36px;list-style:none}
-.nav-links a{color:rgba(255,255,255,0.52);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;transition:color .2s}
+.nav-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;transition:color .2s}
 .nav-links a:hover{color:#fff}
 .nav-btn{background:#1A3A6B;color:#fff;border:none;padding:11px 30px;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background .2s}
 .nav-btn:hover{background:#264f96}
 
-/* HERO */
+/* ── HERO ── */
 #hero{position:relative;height:500vh}
-.hero-pin{position:sticky;top:0;height:100vh;overflow:hidden}
+
+.pin{
+  position:sticky;top:0;
+  height:100vh;
+  overflow:hidden;
+}
 
 /* Sky */
-.sky{position:absolute;inset:0;z-index:0;
-  background:linear-gradient(180deg,#060e18 0%,#0f1e2e 10%,#1e2d1e 22%,#3a2810 40%,#5a3a12 52%,#3a1e08 64%,#180e04 78%,#0a0806 100%)
+.sky{
+  position:absolute;inset:0;z-index:0;
+  background:linear-gradient(180deg,
+    #060d17 0%,#0d1c2c 12%,
+    #2a1e0a 38%,#4a2e0a 52%,
+    #2e1506 65%,#150a03 78%,
+    #080504 100%
+  );
 }
 
-/* Fleet atmosphere bg */
-.bg-fleet{
-  position:absolute;bottom:16%;left:0;width:100%;height:52%;z-index:1;
-  background:url('img/bg-fleet.jpg') center 40% / cover no-repeat;
-  opacity:0.15;
+/* Dark fleet bg image — very subtle atmosphere */
+.bg-atm{
+  position:absolute;
+  bottom:14%;left:0;width:100%;height:54%;
+  z-index:1;
+  background:url('img/bg-fleet.jpg') center 45% / cover no-repeat;
+  opacity:0.13;
+  mix-blend-mode:luminosity;
 }
 
-/* Horizon glow */
-.h-glow{
-  position:absolute;bottom:26%;left:50%;transform:translateX(-50%);
-  width:120%;height:220px;z-index:2;pointer-events:none;
-  background:radial-gradient(ellipse at center,rgba(255,140,40,0.3) 0%,rgba(180,70,10,0.12) 38%,transparent 68%);
+/* Horizon sun glow */
+.sun{
+  position:absolute;
+  bottom:25%;left:50%;transform:translateX(-50%);
+  width:120%;height:220px;
+  z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 80%,
+    rgba(255,140,40,0.38) 0%,
+    rgba(180,70,10,0.15) 35%,
+    transparent 65%
+  );
 }
 
 /* Ground */
-.ground{position:absolute;bottom:0;left:0;width:100%;height:29%;z-index:2;
-  background:linear-gradient(180deg,#100804 0%,#050302 100%)}
-
-/* Road */
-.road{position:absolute;bottom:29%;left:0;width:100%;height:5px;z-index:3;
-  background:linear-gradient(90deg,transparent 0%,rgba(160,120,60,0.28) 8%,rgba(200,160,80,0.52) 50%,rgba(160,120,60,0.28) 92%,transparent 100%)}
-
-/* Road dashes */
-.road-dash{position:absolute;bottom:calc(29% + 20px);left:0;width:100%;height:2px;overflow:hidden;z-index:3}
-.road-dash::after{
-  content:'';position:absolute;top:0;left:-200px;width:200%;height:100%;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 70px,rgba(255,255,255,0.06) 70px,rgba(255,255,255,0.06) 140px);
-  animation:rd 2.8s linear infinite
+.ground{
+  position:absolute;bottom:0;left:0;
+  width:100%;height:30%;
+  z-index:2;
+  background:linear-gradient(180deg,#0e0804 0%,#040201 100%);
 }
-@keyframes rd{from{transform:translateX(0)}to{transform:translateX(210px)}}
 
-/* TRUCK IMAGES — all absolutely positioned, bottom-aligned to road */
-.t{
+/* Road line */
+.road{
+  position:absolute;bottom:30%;left:0;
+  width:100%;height:5px;z-index:3;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(160,120,60,0.25) 8%,
+    rgba(210,170,80,0.55) 50%,
+    rgba(160,120,60,0.25) 92%,
+    transparent 100%
+  );
+}
+.road::after{
+  content:'';
+  position:absolute;bottom:-12px;left:5%;width:90%;height:20px;
+  background:radial-gradient(ellipse,rgba(180,140,60,0.12) 0%,transparent 70%);
+}
+
+/* Animated road dashes */
+.dashes{
+  position:absolute;bottom:calc(30% + 20px);
+  left:0;width:100%;height:2px;
+  overflow:hidden;z-index:3;
+}
+.dashes::after{
+  content:'';
+  position:absolute;top:0;left:-200px;width:200%;height:100%;
+  background:repeating-linear-gradient(90deg,
+    transparent 0,transparent 70px,
+    rgba(255,255,255,0.055) 70px,rgba(255,255,255,0.055) 140px
+  );
+  animation:dash 3s linear infinite;
+}
+@keyframes dash{from{transform:translateX(0)}to{transform:translateX(210px)}}
+
+/* ── TRUCK LAYERS ──
+   Key insight: use width in VW so we never need offsetWidth.
+   JS only uses window.innerWidth math, never el.offsetWidth.
+   Trucks sit bottom:30% to align with road.
+*/
+.truck{
   position:absolute;
-  bottom:29%;
-  left:0;
+  bottom:30%;
+  /* Start off-screen right — set by JS */
+  height:auto;
   pointer-events:none;
   will-change:transform;
-  /* images all start off-screen right — JS sets transform */
+  display:block;
 }
 
-#t-far{
+/* Far: tiny silhouette */
+#tk-far{
+  width:55vw;
   z-index:3;
-  height:11vh;
-  width:auto;
-  filter:brightness(0.22) saturate(0.08);
+  filter:brightness(0.2) saturate(0.05);
+  opacity:0.65;
+}
+
+/* Mid: medium, dark */
+#tk-mid{
+  width:75vw;
+  z-index:4;
+  filter:brightness(0.35) saturate(0.1) blur(0.6px);
   opacity:0.75;
 }
-#t-mid{
-  z-index:4;
-  height:20vh;
-  width:auto;
-  filter:brightness(0.38) saturate(0.12) blur(0.5px);
-  opacity:0.8;
-}
-#t-main{
+
+/* Main: hero truck, full detail */
+#tk-main{
+  width:110vw;
   z-index:5;
-  height:40vh;
-  width:auto;
-  filter:brightness(0.85) contrast(1.1) saturate(0.68);
+  filter:brightness(0.82) contrast(1.12) saturate(0.65);
 }
 
 /* Headlight beam */
 #beam{
-  position:absolute;bottom:29%;z-index:4;pointer-events:none;
-  width:700px;height:200px;
-  background:linear-gradient(90deg,rgba(230,210,130,0.24) 0%,rgba(230,210,130,0.08) 50%,transparent 100%);
-  clip-path:polygon(100% 30%,100% 70%,0 100%,0 0%);
-  transform-origin:right center;
+  position:absolute;bottom:30%;z-index:4;
+  width:60vw;height:18vh;
+  pointer-events:none;
+  background:linear-gradient(90deg,
+    rgba(230,210,130,0.22) 0%,
+    rgba(230,210,130,0.07) 50%,
+    transparent 100%
+  );
+  clip-path:polygon(100% 28%,100% 72%,0 100%,0 0%);
   will-change:left,opacity;
 }
 
-/* Dark vignette */
-.vignette{
-  position:absolute;inset:0;z-index:6;pointer-events:none;
+/* Vignette overlay */
+.vig{
+  position:absolute;inset:0;z-index:8;pointer-events:none;
   background:
-    radial-gradient(ellipse 85% 65% at 50% 50%,transparent 25%,rgba(0,0,0,0.52) 100%),
-    linear-gradient(180deg,rgba(0,0,0,0.5) 0%,transparent 15%,transparent 70%,rgba(0,0,0,0.85) 100%);
+    radial-gradient(ellipse 90% 70% at 50% 50%,transparent 20%,rgba(0,0,0,0.5) 100%),
+    linear-gradient(180deg,rgba(0,0,0,0.55) 0%,transparent 14%,transparent 68%,rgba(0,0,0,0.9) 100%);
 }
 
-/* Hero text */
-.hero-text{
-  position:absolute;bottom:32%;left:0;width:100%;padding:0 60px;
-  z-index:8;pointer-events:none;will-change:opacity;
+/* ── HERO TEXT ── */
+.hero-txt{
+  position:absolute;
+  bottom:33%;left:60px;
+  z-index:10;pointer-events:none;
+  will-change:opacity;
 }
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:0.24em;text-transform:uppercase;color:#8B6343;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,0.9)}
-.h1{font-style:italic;font-weight:900;font-size:clamp(68px,9vw,126px);line-height:0.86;color:#fff;text-shadow:0 2px 48px rgba(0,0,0,0.95),0 1px 16px rgba(0,0,0,0.7)}
-.h1 .blue{color:#1A3A6B}
-.sub{margin-top:20px;font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.36);text-shadow:0 1px 8px rgba(0,0,0,0.8)}
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:0.24em;
+  text-transform:uppercase;color:#8B6343;margin-bottom:14px;
+}
+.h1{
+  font-style:italic;font-weight:900;
+  font-size:clamp(70px,9.5vw,130px);
+  line-height:0.85;color:#fff;
+  text-shadow:0 4px 60px rgba(0,0,0,1),0 2px 20px rgba(0,0,0,0.8);
+}
+.h1 em{color:#1A3A6B;font-style:italic}
+.sub{
+  margin-top:22px;
+  font-size:12px;font-weight:700;letter-spacing:0.2em;
+  text-transform:uppercase;color:rgba(255,255,255,0.35);
+}
 
 /* Scroll cue */
-.sc{position:absolute;bottom:28px;right:52px;z-index:8;display:flex;align-items:center;gap:14px;pointer-events:none}
-.sc span{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.25)}
+.sc{
+  position:absolute;bottom:28px;right:52px;
+  z-index:10;display:flex;align-items:center;gap:14px;
+  pointer-events:none;
+}
+.sc-lbl{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.25)}
 .sc-line{width:1px;height:50px;background:linear-gradient(180deg,rgba(255,255,255,0.28),transparent);animation:scl 2s ease-in-out infinite}
 @keyframes scl{0%,100%{opacity:0.3}50%{opacity:1}}
 
-/* CONTENT */
-.section{background:#0a0a0a;position:relative;z-index:10}
+/* ── CONTENT SECTIONS ── */
+.sec{background:#0a0a0a;position:relative;z-index:20}
 
+/* Stats */
 #s-stats{
   display:grid;grid-template-columns:1fr 1fr;gap:80px;
-  padding:110px 60px;border-top:1px solid rgba(255,255,255,0.07);align-items:center;
+  padding:110px 60px;
+  border-top:1px solid rgba(255,255,255,0.07);
+  align-items:center;
+  background:#0a0a0a;
 }
 .tag{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#8B6343;margin-bottom:18px}
 .sh2{font-style:italic;font-weight:900;font-size:clamp(44px,5vw,72px);line-height:0.94;color:#fff;margin-bottom:24px}
@@ -145,14 +225,25 @@ nav{
 .sn{font-style:italic;font-weight:900;font-size:54px;color:var(--c,#1A3A6B);line-height:1}
 .sl{margin-top:8px;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3)}
 
-#s-services{padding:110px 60px;background:#0c0c0c;border-top:1px solid rgba(255,255,255,0.05)}
+/* Services */
+#s-services{
+  padding:110px 60px;
+  background:#0c0c0c;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
 .svc-g{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:64px}
-.svc-c{background:#0f0f0f;padding:46px 34px;border-top:3px solid transparent;transition:border-color .25s,background .25s;cursor:default}
+.svc-c{
+  background:#0f0f0f;padding:46px 34px;
+  border-top:3px solid transparent;
+  transition:border-color .25s,background .25s;
+  cursor:default;
+}
 .svc-c:hover{border-top-color:#1A3A6B;background:#111}
 .svc-c svg{width:42px;height:42px;margin-bottom:26px;display:block}
 .svc-n{font-style:italic;font-weight:900;font-size:21px;color:#fff;margin-bottom:12px}
 .svc-d{font-size:14px;line-height:1.65;color:rgba(255,255,255,0.38)}
 
+/* CTA */
 #s-cta{
   padding:110px 60px;background:#1A3A6B;
   display:flex;align-items:center;justify-content:space-between;gap:60px;
@@ -160,12 +251,23 @@ nav{
 }
 #s-cta h2{font-style:italic;font-weight:900;font-size:clamp(44px,5vw,72px);line-height:0.92;color:#fff}
 #s-cta h2 em{color:rgba(255,255,255,0.28);font-style:italic}
-.cta-btn{flex-shrink:0;background:#fff;color:#1A3A6B;border:none;padding:22px 52px;font-family:inherit;font-style:italic;font-weight:900;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:transform .18s;white-space:nowrap}
+.cta-btn{
+  flex-shrink:0;background:#fff;color:#1A3A6B;border:none;
+  padding:22px 52px;font-family:inherit;font-style:italic;
+  font-weight:900;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;
+  cursor:pointer;transition:transform .18s;white-space:nowrap;
+}
 .cta-btn:hover{transform:scale(1.04)}
 
-footer{background:#070707;border-top:1px solid rgba(255,255,255,0.06);padding:44px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+/* Footer */
+footer{
+  background:#070707;
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding:44px 60px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;
+}
 .fl{font-style:italic;font-weight:900;font-size:17px;color:#fff}
-.fld{color:#8B6343}
+.fl b{color:#8B6343;font-style:normal}
 .flinks{display:flex;gap:28px}
 .flinks a{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.28);text-decoration:none;transition:color .2s}
 .flinks a:hover{color:#fff}
@@ -173,20 +275,23 @@ footer{background:#070707;border-top:1px solid rgba(255,255,255,0.06);padding:44
 
 @media(max-width:768px){
   nav{padding:0 20px}.nav-links{display:none}
-  .hero-text{padding:0 24px}
-  .h1{font-size:clamp(52px,13vw,80px)}
+  .hero-txt{left:24px;bottom:35%}
+  .h1{font-size:clamp(52px,14vw,80px)}
   #s-stats{grid-template-columns:1fr;padding:70px 24px;gap:44px}
   #s-services{padding:70px 24px}.svc-g{grid-template-columns:1fr}
   #s-cta{flex-direction:column;padding:70px 24px;text-align:center}
   footer{padding:32px 24px;flex-direction:column}
-  #t-main{height:24vh}#t-mid{height:14vh}#t-far{height:8vh}
+  #tk-main{width:170vw}
+  #tk-mid{width:120vw}
+  #tk-far{width:90vw}
 }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <div class="logo">JNB<span class="logo-dot">.</span>EXPRESS</div>
+  <div class="logo">JNB<b>.</b>EXPRESS</div>
   <ul class="nav-links">
     <li><a href="#s-services">Services</a></li>
     <li><a href="#s-stats">Coverage</a></li>
@@ -195,39 +300,47 @@ footer{background:#070707;border-top:1px solid rgba(255,255,255,0.06);padding:44
   <button class="nav-btn">Book Now</button>
 </nav>
 
+<!-- ══════════ HERO ══════════ -->
 <section id="hero">
-  <div class="hero-pin" id="pin">
+  <div class="pin" id="pin">
+
     <div class="sky" id="sky"></div>
-    <div class="bg-fleet"></div>
-    <div class="h-glow" id="glow"></div>
+    <div class="bg-atm"></div>
+    <div class="sun" id="sun"></div>
     <div class="ground"></div>
     <div class="road"></div>
-    <div class="road-dash"></div>
+    <div class="dashes"></div>
     <div id="beam"></div>
 
-    <img id="t-far"  class="t" src="img/truck-far.jpg"  alt="">
-    <img id="t-mid"  class="t" src="img/truck-mid.jpg"  alt="">
-    <img id="t-main" class="t" src="img/truck-main.jpg" alt="">
+    <!-- Trucks — width in vw, no JS dimension reading needed -->
+    <img id="tk-far"  class="truck" src="img/truck-far.jpg"  alt="">
+    <img id="tk-mid"  class="truck" src="img/truck-mid.jpg"  alt="">
+    <img id="tk-main" class="truck" src="img/truck-main.jpg" alt="">
 
-    <div class="hero-text" id="htxt">
+    <!-- Text -->
+    <div class="hero-txt" id="htxt">
       <div class="eyebrow">Tbilisi Premium Courier &nbsp;·&nbsp; 2026</div>
-      <h1 class="h1">WE MOVE<br><span class="blue">TBILISI.</span></h1>
+      <h1 class="h1">WE MOVE<br><em>TBILISI.</em></h1>
       <p class="sub">Same-Day Delivery &nbsp;·&nbsp; Every District &nbsp;·&nbsp; Flat-Rate Zones</p>
     </div>
 
+    <!-- Scroll cue -->
     <div class="sc" id="sc">
-      <span>Scroll to explore</span>
+      <span class="sc-lbl">Scroll to explore</span>
       <div class="sc-line"></div>
     </div>
 
-    <div class="vignette"></div>
+    <div class="vig"></div>
   </div>
 </section>
 
-<section class="section" id="s-stats">
-  <div class="tag">Coverage Network</div>
-  <h2 class="sh2">Tbilisi.<br>City-wide.</h2>
-  <p class="sp">JNB Express covers every district in Tbilisi with same-day delivery. We operate during peak business hours so your parcels arrive before the day ends — not the day after.</p>
+<!-- ══════════ STATS ══════════ -->
+<section class="sec" id="s-stats">
+  <div>
+    <div class="tag">Coverage Network</div>
+    <h2 class="sh2">Tbilisi.<br>City-wide.</h2>
+    <p class="sp">JNB Express covers every district in Tbilisi with same-day delivery. We operate during peak business hours so your parcels arrive before the day ends — not the day after.</p>
+  </div>
   <div class="sg">
     <div class="sb" style="--c:#1A3A6B"><div class="sn">2H</div><div class="sl">Avg Delivery Time</div></div>
     <div class="sb" style="--c:#1A3A6B"><div class="sn">9+</div><div class="sl">Districts Covered</div></div>
@@ -236,35 +349,51 @@ footer{background:#070707;border-top:1px solid rgba(255,255,255,0.06);padding:44
   </div>
 </section>
 
-<section class="section" id="s-services">
+<!-- ══════════ SERVICES ══════════ -->
+<section class="sec" id="s-services">
   <div class="tag">What We Move</div>
   <h2 class="sh2">Built for<br>every load.</h2>
   <div class="svc-g">
     <div class="svc-c" style="border-top-color:#1A3A6B">
-      <svg viewBox="0 0 42 42" fill="none"><rect x="3" y="11" width="28" height="22" rx="2" stroke="#1A3A6B" stroke-width="2"/><path d="M31 19h7v10l-7 4V19Z" stroke="#8B6343" stroke-width="2"/><circle cx="9" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><circle cx="27" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg>
+      <svg viewBox="0 0 42 42" fill="none">
+        <rect x="3" y="11" width="28" height="22" rx="2" stroke="#1A3A6B" stroke-width="2"/>
+        <path d="M31 19h7v10l-7 4V19Z" stroke="#8B6343" stroke-width="2"/>
+        <circle cx="9" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <circle cx="27" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+      </svg>
       <div class="svc-n">Express Delivery</div>
       <div class="svc-d">Same-day door-to-door across Tbilisi. Flat-rate zone pricing. No hidden fees, no surprises.</div>
     </div>
     <div class="svc-c">
-      <svg viewBox="0 0 42 42" fill="none"><rect x="7" y="5" width="28" height="32" rx="2" stroke="#1A3A6B" stroke-width="2"/><line x1="13" y1="15" x2="29" y2="15" stroke="#8B6343" stroke-width="2"/><line x1="13" y1="21" x2="29" y2="21" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><line x1="13" y1="27" x2="23" y2="27" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
+      <svg viewBox="0 0 42 42" fill="none">
+        <rect x="7" y="5" width="28" height="32" rx="2" stroke="#1A3A6B" stroke-width="2"/>
+        <line x1="13" y1="15" x2="29" y2="15" stroke="#8B6343" stroke-width="2"/>
+        <line x1="13" y1="21" x2="29" y2="21" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="13" y1="27" x2="23" y2="27" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      </svg>
       <div class="svc-n">Business Courier</div>
       <div class="svc-d">Dedicated routes for offices, e-commerce, and retail. Volume pricing and account invoicing.</div>
     </div>
     <div class="svc-c">
-      <svg viewBox="0 0 42 42" fill="none"><circle cx="21" cy="21" r="16" stroke="#1A3A6B" stroke-width="2"/><path d="M21 5v16l9 5" stroke="#8B6343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 42 42" fill="none">
+        <circle cx="21" cy="21" r="16" stroke="#1A3A6B" stroke-width="2"/>
+        <path d="M21 5v16l9 5" stroke="#8B6343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
       <div class="svc-n">Scheduled Runs</div>
       <div class="svc-d">Regular timed pickups for recurring clients. Lock your slot — we handle the rest every day.</div>
     </div>
   </div>
 </section>
 
-<section class="section" id="s-cta">
+<!-- ══════════ CTA ══════════ -->
+<section class="sec" id="s-cta">
   <h2>Ready to move<br><em>with JNB?</em></h2>
   <button class="cta-btn">Get a Quote &rarr;</button>
 </section>
 
+<!-- ══════════ FOOTER ══════════ -->
 <footer>
-  <div class="fl">JNB<span class="fld">.</span>EXPRESS</div>
+  <div class="fl">JNB<b>.</b>EXPRESS</div>
   <div class="flinks">
     <a href="#s-services">Services</a>
     <a href="#s-stats">Coverage</a>
@@ -275,75 +404,81 @@ footer{background:#070707;border-top:1px solid rgba(255,255,255,0.06);padding:44
 
 <script>
 (function(){
-  var hero = document.getElementById('hero');
-  var sky  = document.getElementById('sky');
-  var glow = document.getElementById('glow');
-  var htxt = document.getElementById('htxt');
-  var sc   = document.getElementById('sc');
-  var beam = document.getElementById('beam');
 
-  // truck configs: speed multiplier + how far PAST the right edge they start
+  var hero  = document.getElementById('hero');
+  var sky   = document.getElementById('sky');
+  var sun   = document.getElementById('sun');
+  var htxt  = document.getElementById('htxt');
+  var sc    = document.getElementById('sc');
+  var beam  = document.getElementById('beam');
+
+  /*
+    TRUCKS — all widths set in CSS as VW.
+    Start position = 100vw + lag (so truck enters from right).
+    End position   = -(truck width in vw) (exits left).
+    Using VW means ZERO dependency on offsetWidth.
+  */
   var trucks = [
-    { el: document.getElementById('t-far'),  speed: 0.50, lag: 0.40 },
-    { el: document.getElementById('t-mid'),  speed: 0.72, lag: 0.22 },
-    { el: document.getElementById('t-main'), speed: 1.00, lag: 0.06 }
+    { el: document.getElementById('tk-far'),  vw: 55,  lag: 35, speed: 0.50 },
+    { el: document.getElementById('tk-mid'),  vw: 75,  lag: 20, speed: 0.72 },
+    { el: document.getElementById('tk-main'), vw: 110, lag:  5, speed: 1.00 }
   ];
 
-  function getP(){
+  function progress(){
     var heroH = hero.offsetHeight;
     var vh    = window.innerHeight;
     return Math.max(0, Math.min(1, window.pageYOffset / (heroH - vh)));
   }
 
-  function update(){
-    var p  = getP();
+  function tick(){
+    var p  = progress();
     var vw = window.innerWidth;
 
     trucks.forEach(function(T){
-      var imgW = T.el.offsetWidth || (window.innerHeight * 2.2); // fallback estimate
-      // At p=0: truck is just off the right edge (vw + lag*vw)
-      // At p=1: truck is fully off the left edge (-imgW)
-      var startX = vw + vw * T.lag;
-      var endX   = -imgW - 80;
-      // Scale travel by speed — slower trucks don't reach endX by p=1
-      var x = startX + (endX - startX) * (p * T.speed + (1 - T.speed) * Math.pow(p, 0.6));
+      /* start: 100vw + lag% off screen right */
+      var startPx = vw + (T.lag / 100) * vw;
+      /* end: truck width (in px) off screen left */
+      var endPx   = -(T.vw / 100) * vw - 40;
+      var x = startPx + (endPx - startPx) * p * T.speed;
       T.el.style.transform = 'translateX(' + x + 'px)';
     });
 
-    // Beam follows main truck cab (right edge of image minus cab width)
-    var mainEl = trucks[2].el;
-    var mainW  = mainEl.offsetWidth || (window.innerHeight * 2.2);
-    var mainX  = parseFloat(trucks[2].el.style.transform.replace('translateX(','')) || 0;
-    beam.style.left    = (mainX + mainW - 80) + 'px';
-    beam.style.opacity = String(Math.max(0, 1 - p * 2.4));
+    /* Beam tracks leading edge of main truck cab */
+    var mainStart = vw + (trucks[2].lag / 100) * vw;
+    var mainEnd   = -(trucks[2].vw / 100) * vw - 40;
+    var mainX     = mainStart + (mainEnd - mainStart) * p;
+    var mainW     = (trucks[2].vw / 100) * vw;
+    /* cab is approx right 20% of image */
+    beam.style.left    = (mainX + mainW * 0.78) + 'px';
+    beam.style.opacity = Math.max(0, 1 - p * 2.2).toString();
 
-    // Text fade
-    var fade = Math.max(0, 1 - p * 2.8);
-    htxt.style.opacity = String(fade);
-    sc.style.opacity   = String(Math.max(0, fade - 0.2));
+    /* Fade hero text */
+    var fade = Math.max(0, 1 - p * 2.6);
+    htxt.style.opacity = fade.toString();
+    sc.style.opacity   = Math.max(0, fade - 0.2).toString();
 
-    // Sky shifts warm → dark
-    var r0 = Math.round(6  + p*22), g0 = Math.round(14+p*6),  b0 = Math.round(24-p*12);
-    var r1 = Math.round(30 + p*38), g1 = Math.round(40+p*6),  b1 = Math.round(30-p*20);
-    var r2 = Math.round(58 + p*34), g2 = Math.round(38-p*16), b2 = Math.round(12-p*6);
-    sky.style.background = 'linear-gradient(180deg,rgb('+r0+','+g0+','+b0+') 0%,rgb('+r1+','+g1+','+b1+') 14%,rgb('+r2+','+g2+','+b2+') 50%,#2a1004 66%,#0e0804 80%,#060402 100%)';
-    glow.style.opacity   = String(Math.max(0, 1 - p*1.8));
+    /* Sky colour shift: deep dawn → warm dusk */
+    var r0 = Math.round(6  + p * 20); var g0 = Math.round(13 + p * 5);  var b0 = Math.round(23 - p * 10);
+    var r1 = Math.round(26 + p * 40); var g1 = Math.round(30 + p * 4);  var b1 = Math.round(20 - p * 14);
+    var r2 = Math.round(74 + p * 30); var g2 = Math.round(46 - p * 18); var b2 = Math.round(10 - p * 4);
+    sky.style.background = [
+      'linear-gradient(180deg,',
+      'rgb('+r0+','+g0+','+b0+') 0%,',
+      'rgb('+r1+','+g1+','+b1+') 14%,',
+      'rgb('+r2+','+g2+','+b2+') 50%,',
+      '#2c1204 67%,',
+      '#0e0704 82%,',
+      '#050302 100%)'
+    ].join('');
+
+    sun.style.opacity = Math.max(0, 1 - p * 1.8).toString();
   }
 
-  // Run on scroll
-  window.addEventListener('scroll', update, {passive:true});
-  window.addEventListener('resize', update);
+  /* Run immediately, on scroll, on resize */
+  tick();
+  window.addEventListener('scroll', tick, { passive: true });
+  window.addEventListener('resize', tick);
 
-  // Run after images load so offsetWidth is real
-  var loaded = 0;
-  trucks.forEach(function(T){
-    if(T.el.complete){ loaded++; if(loaded===3) update(); }
-    else T.el.addEventListener('load', function(){ loaded++; if(loaded===3) update(); });
-  });
-
-  // Also run immediately and on next frame
-  update();
-  requestAnimationFrame(update);
 })();
 </script>
 </body>
