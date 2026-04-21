@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JNB Express — Same-Day, Every Day</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,900;0,400;0,600;0,700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;overflow-x:hidden;background:#0a0a0a;color:#fff;font-family:'Exo 2',sans-serif}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;width:100%;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(10,10,10,0.7);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06)}
+  .nav-logo{font-style:italic;font-weight:900;font-size:22px;letter-spacing:0.04em;color:#fff}
+  .nav-logo span{color:#8B6343}
+  .nav-links{display:flex;gap:32px;list-style:none}
+  .nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;transition:color .2s}
+  .nav-links a:hover{color:#fff}
+  .nav-cta{background:#1A3A6B;color:#fff;border:none;padding:10px 24px;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+  .nav-cta:hover{background:#254d8f}
+
+  /* HERO */
+  #hero{position:relative;height:400vh;background:#0a0a0a}
+  .hero-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .sky{position:absolute;inset:0;background:linear-gradient(180deg,#1a2a3a 0%,#3d2a1a 45%,#1a1008 75%,#0a0a0a 100%)}
+  .ground{position:absolute;bottom:0;left:0;width:100%;height:35%;background:linear-gradient(180deg,#0f0a05 0%,#050302 100%)}
+  .road{position:absolute;bottom:34%;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent 0%,rgba(139,99,67,0.3) 20%,rgba(139,99,67,0.3) 80%,transparent 100%)}
+  .horizon-glow{position:absolute;bottom:32%;left:50%;transform:translateX(-50%);width:600px;height:80px;background:radial-gradient(ellipse,rgba(200,120,50,0.25) 0%,transparent 70%);pointer-events:none}
+  .headlight-beam{position:absolute;bottom:35%;left:0;width:520px;height:120px;background:linear-gradient(90deg,rgba(180,160,100,0.18) 0%,transparent 100%);transform-origin:right center;pointer-events:none;transition:opacity .3s}
+
+  /* TRUCK */
+  #truck-wrap{position:absolute;bottom:24%;width:100%;pointer-events:none}
+  .truck-scene{position:relative;height:200px;width:900px}
+  .truck-cab{position:absolute;right:0;bottom:0;width:280px;height:190px}
+  .truck-trailer{position:absolute;right:250px;bottom:0;width:620px;height:160px}
+
+  /* HERO TEXT */
+  .hero-headline{position:absolute;bottom:40%;left:48px;z-index:10;pointer-events:none}
+  .hero-headline .line1{font-style:italic;font-weight:900;font-size:clamp(52px,7vw,96px);line-height:0.9;color:#fff;opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease}
+  .hero-headline .line2{font-style:italic;font-weight:900;font-size:clamp(52px,7vw,96px);line-height:0.9;color:#1A3A6B;opacity:0;transform:translateY(30px);transition:opacity 0.8s 0.15s ease,transform 0.8s 0.15s ease}
+  .hero-headline.visible .line1,.hero-headline.visible .line2{opacity:1;transform:translateY(0)}
+  .hero-sub{position:absolute;bottom:34%;left:48px;font-size:14px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);opacity:0;transform:translateY(20px);transition:opacity 0.8s 0.3s,transform 0.8s 0.3s;z-index:10}
+  .hero-sub.visible{opacity:1;transform:translateY(0)}
+  .scroll-indicator{position:absolute;bottom:32px;right:48px;display:flex;align-items:center;gap:12px;opacity:0;transition:opacity 1s 0.8s;z-index:10}
+  .scroll-indicator.visible{opacity:1}
+  .scroll-indicator span{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+  .scroll-arrow{width:1px;height:40px;background:linear-gradient(180deg,rgba(255,255,255,0.4),transparent);animation:arrow-drop 1.5s infinite}
+  @keyframes arrow-drop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(16px)}}
+
+  /* SECTION 2 */
+  #section-network{background:#0a0a0a;padding:120px 48px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+  .section-tag{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#8B6343;margin-bottom:20px}
+  .section-heading{font-style:italic;font-weight:900;font-size:clamp(36px,5vw,64px);line-height:1;color:#fff;margin-bottom:24px}
+  .section-body{font-size:16px;line-height:1.7;color:rgba(255,255,255,0.5);max-width:480px}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .stat-card{border:1px solid rgba(26,58,107,0.4);padding:32px 24px;background:rgba(26,58,107,0.08)}
+  .stat-num{font-style:italic;font-weight:900;font-size:48px;color:#1A3A6B;line-height:1}
+  .stat-label{font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:8px}
+
+  /* SECTION 3 */
+  #section-services{background:#0d0d0d;padding:120px 48px}
+  .services-header{margin-bottom:64px;max-width:600px}
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+  .service-card{background:#111;padding:40px 32px;border-top:2px solid transparent;transition:border-color .3s,background .3s;cursor:default}
+  .service-card:hover{background:#141414;border-top-color:#1A3A6B}
+  .service-icon{width:40px;height:40px;margin-bottom:24px;opacity:0.7}
+  .service-name{font-style:italic;font-weight:900;font-size:22px;color:#fff;margin-bottom:12px}
+  .service-desc{font-size:14px;line-height:1.6;color:rgba(255,255,255,0.4)}
+
+  /* SECTION 4 */
+  #section-cta{background:#1A3A6B;padding:120px 48px;display:flex;align-items:center;justify-content:space-between;gap:48px}
+  .cta-heading{font-style:italic;font-weight:900;font-size:clamp(36px,5vw,72px);color:#fff;line-height:0.95}
+  .cta-heading em{color:rgba(255,255,255,0.35);font-style:italic}
+  .cta-btn{white-space:nowrap;background:#fff;color:#1A3A6B;border:none;padding:18px 40px;font-family:'Exo 2',sans-serif;font-weight:900;font-style:italic;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:transform .2s,background .2s;flex-shrink:0}
+  .cta-btn:hover{transform:scale(1.03)}
+
+  /* FOOTER */
+  footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,0.06);padding:48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  .footer-logo{font-style:italic;font-weight:900;font-size:18px;color:#fff}
+  .footer-logo span{color:#8B6343}
+  .footer-copy{font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:0.06em}
+  .footer-links{display:flex;gap:24px}
+  .footer-links a{font-size:12px;color:rgba(255,255,255,0.35);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color .2s}
+  .footer-links a:hover{color:#fff}
+
+  /* Wheel animation */
+  .wheel{animation:spin 1.2s linear infinite}
+  .wheel-back{animation:spin 1.2s linear infinite}
+  @keyframes spin{from{transform-origin:center;transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+  /* Mobile */
+  @media(max-width:768px){
+    nav{padding:16px 20px}
+    .nav-links{display:none}
+    .hero-headline{left:20px}
+    .hero-sub{left:20px}
+    #section-network{grid-template-columns:1fr;padding:80px 20px;gap:40px}
+    #section-services{padding:80px 20px}
+    .services-grid{grid-template-columns:1fr}
+    #section-cta{flex-direction:column;padding:80px 20px;text-align:center}
+    footer{padding:32px 20px;flex-direction:column;text-align:center}
+    .footer-links{justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">JNB<span>.</span>EXPRESS</div>
+  <ul class="nav-links">
+    <li><a href="#section-services">Services</a></li>
+    <li><a href="#section-network">Coverage</a></li>
+    <li><a href="#section-cta">About</a></li>
+    <li><a href="#section-cta">Contact</a></li>
+  </ul>
+  <button class="nav-cta">Book Now</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-sticky" id="hero-sticky">
+    <div class="sky" id="sky-bg"></div>
+    <div class="ground"></div>
+    <div class="road"></div>
+    <div class="horizon-glow"></div>
+    <div class="headlight-beam" id="beam"></div>
+
+    <div class="hero-headline" id="headline">
+      <div class="line1">WE MOVE</div>
+      <div class="line2">TBILISI.</div>
+    </div>
+    <div class="hero-sub" id="herosub">SAME-DAY DELIVERY &nbsp;·&nbsp; TBILISI, GEORGIA</div>
+    <div class="scroll-indicator" id="scrollind">
+      <span>SCROLL TO EXPLORE</span>
+      <div class="scroll-arrow"></div>
+    </div>
+
+    <div id="truck-wrap">
+      <div class="truck-scene" id="truck-scene" style="margin:0 auto;position:relative">
+
+        <!-- TRAILER -->
+        <div class="truck-trailer">
+          <svg viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+            <rect x="4" y="10" width="600" height="120" rx="3" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <rect x="4" y="10" width="600" height="10" rx="2" fill="#1A3A6B"/>
+            <rect x="4" y="20" width="600" height="4" fill="#8B6343"/>
+            <line x1="100" y1="14" x2="100" y2="130" stroke="#222" stroke-width="1"/>
+            <line x1="200" y1="14" x2="200" y2="130" stroke="#222" stroke-width="1"/>
+            <line x1="300" y1="14" x2="300" y2="130" stroke="#222" stroke-width="1"/>
+            <line x1="400" y1="14" x2="400" y2="130" stroke="#222" stroke-width="1"/>
+            <line x1="500" y1="14" x2="500" y2="130" stroke="#222" stroke-width="1"/>
+            <text x="310" y="82" text-anchor="middle" font-family="'Exo 2', sans-serif" font-style="italic" font-weight="900" font-size="44" fill="rgba(255,255,255,0.07)" letter-spacing="4">JNB EXPRESS</text>
+            <text x="310" y="95" text-anchor="middle" font-family="'Exo 2', sans-serif" font-weight="700" font-size="10" fill="rgba(255,255,255,0.3)" letter-spacing="6">SCROLL TO EXPLORE</text>
+            <rect x="4" y="128" width="600" height="6" rx="1" fill="#111"/>
+            <rect x="598" y="18" width="4" height="8" rx="1" fill="#e05c00" opacity="0.8"/>
+            <rect x="598" y="30" width="4" height="8" rx="1" fill="#cc0000" opacity="0.6"/>
+            <line x1="4" y1="70" x2="4" y2="128" stroke="#444" stroke-width="2"/>
+            <rect x="50" y="134" width="500" height="10" rx="2" fill="#0d0d0d"/>
+            <rect x="480" y="140" width="80" height="8" rx="2" fill="#1a1a1a"/>
+            <g transform="translate(490,148)">
+              <circle cx="0" cy="0" r="14" fill="#111" stroke="#333" stroke-width="1.5" class="wheel-back"/>
+              <circle cx="0" cy="0" r="8" fill="#1a1a1a"/>
+              <line x1="0" y1="-8" x2="0" y2="8" stroke="#333" stroke-width="1.5" class="wheel"/>
+              <line x1="-8" y1="0" x2="8" y2="0" stroke="#333" stroke-width="1.5" class="wheel"/>
+            </g>
+            <g transform="translate(530,148)">
+              <circle cx="0" cy="0" r="14" fill="#111" stroke="#333" stroke-width="1.5"/>
+              <circle cx="0" cy="0" r="8" fill="#1a1a1a"/>
+              <line x1="0" y1="-8" x2="0" y2="8" stroke="#333" stroke-width="1.5" class="wheel"/>
+              <line x1="-8" y1="0" x2="8" y2="0" stroke="#333" stroke-width="1.5" class="wheel"/>
+            </g>
+            <rect x="555" y="128" width="30" height="12" rx="2" fill="#141414" stroke="#2a2a2a" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <!-- CAB -->
+        <div class="truck-cab">
+          <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+            <path d="M30,180 L30,60 Q30,30 55,20 L180,10 Q220,8 240,40 L260,80 L260,180 Z" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <path d="M55,20 L180,10 Q210,8 235,35 L60,35 Q48,30 55,20 Z" fill="#1A3A6B"/>
+            <rect x="30" y="35" width="230" height="5" fill="#8B6343"/>
+            <path d="M58,22 L175,12 Q205,10 228,38 L65,38 Q50,33 58,22 Z" fill="#0d1a2e" opacity="0.9"/>
+            <path d="M80,24 L170,16 Q195,15 215,33 L95,33 Q75,30 80,24 Z" fill="rgba(26,58,107,0.3)"/>
+            <path d="M30,42 L58,42 L58,80 L30,75 Z" fill="#0d1a2e" opacity="0.9"/>
+            <line x1="90" y1="40" x2="90" y2="175" stroke="#222" stroke-width="1"/>
+            <rect x="100" y="100" width="80" height="36" rx="2" fill="#1A3A6B" opacity="0.6"/>
+            <text x="140" y="123" text-anchor="middle" font-family="'Exo 2', sans-serif" font-style="italic" font-weight="900" font-size="18" fill="rgba(255,255,255,0.8)">JNB</text>
+            <rect x="240" y="10" width="8" height="55" rx="2" fill="#111" stroke="#222" stroke-width="1"/>
+            <rect x="252" y="14" width="7" height="50" rx="2" fill="#111" stroke="#222" stroke-width="1"/>
+            <circle cx="244" cy="8" r="4" fill="#1a1a1a" opacity="0.4"/>
+            <circle cx="247" cy="4" r="3" fill="#1a1a1a" opacity="0.25"/>
+            <circle cx="256" cy="12" r="3.5" fill="#1a1a1a" opacity="0.35"/>
+            <rect x="250" y="90" width="20" height="12" rx="2" fill="#f0e0a0" opacity="0.9"/>
+            <rect x="250" y="106" width="18" height="8" rx="1" fill="#e05c00" opacity="0.7"/>
+            <rect x="28" y="170" width="240" height="14" rx="2" fill="#111" stroke="#2a2a2a" stroke-width="1"/>
+            <rect x="35" y="158" width="50" height="8" rx="1" fill="#141414" stroke="#222" stroke-width="1"/>
+            <g transform="translate(70,184)">
+              <circle cx="0" cy="0" r="16" fill="#111" stroke="#333" stroke-width="1.5"/>
+              <circle cx="0" cy="0" r="9" fill="#1a1a1a"/>
+              <line x1="0" y1="-9" x2="0" y2="9" stroke="#333" stroke-width="1.5" class="wheel"/>
+              <line x1="-9" y1="0" x2="9" y2="0" stroke="#333" stroke-width="1.5" class="wheel"/>
+              <line x1="-6.4" y1="-6.4" x2="6.4" y2="6.4" stroke="#2a2a2a" stroke-width="1" class="wheel"/>
+              <line x1="6.4" y1="-6.4" x2="-6.4" y2="6.4" stroke="#2a2a2a" stroke-width="1" class="wheel"/>
+            </g>
+            <g transform="translate(200,184)">
+              <circle cx="0" cy="0" r="16" fill="#111" stroke="#333" stroke-width="1.5"/>
+              <circle cx="0" cy="0" r="9" fill="#1a1a1a"/>
+              <line x1="0" y1="-9" x2="0" y2="9" stroke="#333" stroke-width="1.5" class="wheel"/>
+              <line x1="-9" y1="0" x2="9" y2="0" stroke="#333" stroke-width="1.5" class="wheel"/>
+            </g>
+            <rect x="25" y="52" width="14" height="3" rx="1" fill="#222"/>
+            <rect x="15" y="48" width="12" height="22" rx="2" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+          </svg>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2 — NETWORK STATS -->
+<section id="section-network">
+  <div>
+    <div class="section-tag">Coverage Network</div>
+    <div class="section-heading">Tbilisi.<br>City-wide.</div>
+    <p class="section-body">JNB Express covers every district in Tbilisi with same-day delivery. We operate during peak business hours so your parcels arrive before the day ends — not the day after.</p>
+  </div>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num">2H</div>
+      <div class="stat-label">Average Delivery Time</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">9+</div>
+      <div class="stat-label">Districts Covered</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">8 GEL</div>
+      <div class="stat-label">Zone 1 Flat Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2026</div>
+      <div class="stat-label">Launch Year</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 — SERVICES -->
+<section id="section-services">
+  <div class="services-header">
+    <div class="section-tag">What We Move</div>
+    <div class="section-heading">Built for<br>every load.</div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="10" width="28" height="22" rx="2" stroke="#1A3A6B" stroke-width="2"/>
+        <path d="M32 18h4v8l-4 4V18Z" stroke="#8B6343" stroke-width="2"/>
+        <circle cx="10" cy="34" r="3" stroke="#fff" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="26" cy="34" r="3" stroke="#fff" stroke-width="1.5" opacity="0.5"/>
+      </svg>
+      <div class="service-name">Express Delivery</div>
+      <div class="service-desc">Same-day door-to-door across Tbilisi. Flat-rate zone pricing. No hidden fees.</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="6" width="24" height="28" rx="2" stroke="#1A3A6B" stroke-width="2"/>
+        <line x1="13" y1="14" x2="27" y2="14" stroke="#8B6343" stroke-width="1.5"/>
+        <line x1="13" y1="20" x2="27" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="13" y1="26" x2="22" y2="26" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      </svg>
+      <div class="service-name">Business Courier</div>
+      <div class="service-desc">Dedicated routes for offices, e-commerce, and retail. Volume pricing available.</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="14" stroke="#1A3A6B" stroke-width="2"/>
+        <path d="M20 6v14l8 4" stroke="#8B6343" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="service-name">Scheduled Runs</div>
+      <div class="service-desc">Regular timed pickups for recurring clients. Lock in your slot, we handle the rest.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 — CTA -->
+<section id="section-cta">
+  <div class="cta-heading">
+    Ready to move<br>with <em>JNB?</em>
+  </div>
+  <button class="cta-btn">Get a Quote &rarr;</button>
+</section>
+
+<footer>
+  <div class="footer-logo">JNB<span>.</span>EXPRESS</div>
+  <div class="footer-links">
+    <a href="#section-services">Services</a>
+    <a href="#section-network">Coverage</a>
+    <a href="#section-cta">About</a>
+    <a href="#section-cta">Contact</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 JNB Express &mdash; Ninth Protocol O&Uuml;. Tbilisi, Georgia.</div>
+</footer>
+
+<script>
+const hero = document.getElementById('hero');
+const sticky = document.getElementById('hero-sticky');
+const truckScene = document.getElementById('truck-scene');
+const headline = document.getElementById('headline');
+const herosub = document.getElementById('herosub');
+const scrollind = document.getElementById('scrollind');
+const beam = document.getElementById('beam');
+const skyBg = document.getElementById('sky-bg');
+
+setTimeout(() => {
+  headline.classList.add('visible');
+  herosub.classList.add('visible');
+  scrollind.classList.add('visible');
+}, 400);
+
+function onScroll() {
+  const heroTop = hero.getBoundingClientRect().top;
+  const heroH = hero.offsetHeight;
+  const viewH = window.innerHeight;
+  const scrolled = -heroTop;
+  const totalScroll = heroH - viewH;
+  const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
+
+  const vw = window.innerWidth;
+  const truckW = 900;
+  const startX = vw * 0.05;
+  const endX = -truckW * 0.85;
+  const x = startX + (endX - startX) * progress;
+  truckScene.style.transform = 'translateX(' + x + 'px)';
+
+  beam.style.left = (x + truckW - 280) + 'px';
+  beam.style.opacity = Math.max(0, 1 - progress * 1.5);
+
+  const headFade = Math.max(0, 1 - progress * 3);
+  headline.style.opacity = headFade;
+  herosub.style.opacity = headFade;
+  scrollind.style.opacity = Math.max(0, headFade - 0.3);
+
+  const r1 = Math.round(26 + progress * 40);
+  const g1 = Math.round(42 + progress * 10);
+  const b1 = Math.round(58 - progress * 20);
+  const r2 = Math.round(61 + progress * 20);
+  const g2 = Math.round(42 - progress * 10);
+  const b2 = Math.round(26 - progress * 10);
+  skyBg.style.background =
+    'linear-gradient(180deg, rgb(' + r1 + ',' + g1 + ',' + b1 + ') 0%, rgb(' + r2 + ',' + g2 + ',' + b2 + ') 45%, #1a1008 75%, #0a0a0a 100%)';
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+</script>
+</body>
+</html>
