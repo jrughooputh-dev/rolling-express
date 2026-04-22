@@ -14,12 +14,12 @@ nav{
   position:fixed;top:0;left:0;width:100%;z-index:300;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 52px;height:66px;
-  background:rgba(6,6,6,0.9);
-  border-bottom:1px solid rgba(255,255,255,0.07);
+  background:rgba(6,6,6,0.88);
+  border-bottom:1px solid rgba(255,255,255,0.06);
   backdrop-filter:blur(18px);
 }
 .logo{font-style:italic;font-weight:900;font-size:21px;letter-spacing:0.05em;color:#fff}
-.logo b{color:#8B6343;font-style:normal;font-weight:900}
+.logo b{color:#8B6343;font-style:normal}
 .nav-links{display:flex;gap:36px;list-style:none}
 .nav-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;transition:color .2s}
 .nav-links a:hover{color:#fff}
@@ -29,193 +29,43 @@ nav{
 /* ── HERO ── */
 #hero{position:relative;height:500vh}
 
-.pin{
+.sticky{
   position:sticky;top:0;
-  height:100vh;
+  width:100vw;height:100vh;
   overflow:hidden;
 }
 
-/* Sky */
-.sky{
-  position:absolute;inset:0;z-index:0;
-  background:linear-gradient(180deg,
-    #060d17 0%,#0d1c2c 12%,
-    #2a1e0a 38%,#4a2e0a 52%,
-    #2e1506 65%,#150a03 78%,
-    #080504 100%
-  );
-}
-
-/* Dark fleet bg image — very subtle atmosphere */
-.bg-atm{
-  position:absolute;
-  bottom:14%;left:0;width:100%;height:54%;
-  z-index:1;
-  background:url('img/bg-fleet.jpg') center 45% / cover no-repeat;
-  opacity:0.13;
-  mix-blend-mode:luminosity;
-}
-
-/* Horizon sun glow */
-.sun{
-  position:absolute;
-  bottom:25%;left:50%;transform:translateX(-50%);
-  width:120%;height:220px;
-  z-index:2;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 80%,
-    rgba(255,140,40,0.38) 0%,
-    rgba(180,70,10,0.15) 35%,
-    transparent 65%
-  );
-}
-
-/* Ground */
-.ground{
-  position:absolute;bottom:0;left:0;
-  width:100%;height:30%;
-  z-index:2;
-  background:linear-gradient(180deg,#0e0804 0%,#040201 100%);
-}
-
-/* Road line */
-.road{
-  position:absolute;bottom:30%;left:0;
-  width:100%;height:5px;z-index:3;
-  background:linear-gradient(90deg,
-    transparent 0%,
-    rgba(160,120,60,0.25) 8%,
-    rgba(210,170,80,0.55) 50%,
-    rgba(160,120,60,0.25) 92%,
-    transparent 100%
-  );
-}
-.road::after{
-  content:'';
-  position:absolute;bottom:-12px;left:5%;width:90%;height:20px;
-  background:radial-gradient(ellipse,rgba(180,140,60,0.12) 0%,transparent 70%);
-}
-
-/* Animated road dashes */
-.dashes{
-  position:absolute;bottom:calc(30% + 20px);
-  left:0;width:100%;height:2px;
-  overflow:hidden;z-index:3;
-}
-.dashes::after{
-  content:'';
-  position:absolute;top:0;left:-200px;width:200%;height:100%;
-  background:repeating-linear-gradient(90deg,
-    transparent 0,transparent 70px,
-    rgba(255,255,255,0.055) 70px,rgba(255,255,255,0.055) 140px
-  );
-  animation:dash 3s linear infinite;
-}
-@keyframes dash{from{transform:translateX(0)}to{transform:translateX(210px)}}
-
-/* ── TRUCK LAYERS ──
-   Key insight: use width in VW so we never need offsetWidth.
-   JS only uses window.innerWidth math, never el.offsetWidth.
-   Trucks sit bottom:30% to align with road.
-*/
-.truck{
-  position:absolute;
-  bottom:30%;
-  /* Start off-screen right — set by JS */
-  height:auto;
-  pointer-events:none;
-  will-change:transform;
+/* Canvas fills full viewport — just like Terminal Industries */
+#scene{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
   display:block;
 }
 
-/* Far: tiny silhouette */
-#tk-far{
-  width:55vw;
-  z-index:3;
-  filter:brightness(0.2) saturate(0.05);
-  opacity:0.65;
-}
-
-/* Mid: medium, dark */
-#tk-mid{
-  width:75vw;
-  z-index:4;
-  filter:brightness(0.35) saturate(0.1) blur(0.6px);
-  opacity:0.75;
-}
-
-/* Main: hero truck, full detail */
-#tk-main{
-  width:110vw;
-  z-index:5;
-  filter:brightness(0.82) contrast(1.12) saturate(0.65);
-}
-
-/* Headlight beam */
-#beam{
-  position:absolute;bottom:30%;z-index:4;
-  width:60vw;height:18vh;
-  pointer-events:none;
-  background:linear-gradient(90deg,
-    rgba(230,210,130,0.22) 0%,
-    rgba(230,210,130,0.07) 50%,
-    transparent 100%
-  );
-  clip-path:polygon(100% 28%,100% 72%,0 100%,0 0%);
-  will-change:left,opacity;
-}
-
-/* Vignette overlay */
-.vig{
-  position:absolute;inset:0;z-index:8;pointer-events:none;
-  background:
-    radial-gradient(ellipse 90% 70% at 50% 50%,transparent 20%,rgba(0,0,0,0.5) 100%),
-    linear-gradient(180deg,rgba(0,0,0,0.55) 0%,transparent 14%,transparent 68%,rgba(0,0,0,0.9) 100%);
-}
-
-/* ── HERO TEXT ── */
-.hero-txt{
+/* Text overlay */
+.hero-text{
   position:absolute;
-  bottom:33%;left:60px;
+  bottom:18%;left:60px;
   z-index:10;pointer-events:none;
   will-change:opacity;
 }
-.eyebrow{
-  font-size:11px;font-weight:700;letter-spacing:0.24em;
-  text-transform:uppercase;color:#8B6343;margin-bottom:14px;
-}
-.h1{
-  font-style:italic;font-weight:900;
-  font-size:clamp(70px,9.5vw,130px);
-  line-height:0.85;color:#fff;
-  text-shadow:0 4px 60px rgba(0,0,0,1),0 2px 20px rgba(0,0,0,0.8);
-}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:0.24em;text-transform:uppercase;color:#8B6343;margin-bottom:14px}
+.h1{font-style:italic;font-weight:900;font-size:clamp(68px,9vw,128px);line-height:0.86;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,0.95)}
 .h1 em{color:#1A3A6B;font-style:italic}
-.sub{
-  margin-top:22px;
-  font-size:12px;font-weight:700;letter-spacing:0.2em;
-  text-transform:uppercase;color:rgba(255,255,255,0.35);
-}
+.sub{margin-top:18px;font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.38)}
 
 /* Scroll cue */
-.sc{
-  position:absolute;bottom:28px;right:52px;
-  z-index:10;display:flex;align-items:center;gap:14px;
-  pointer-events:none;
-}
-.sc-lbl{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.25)}
-.sc-line{width:1px;height:50px;background:linear-gradient(180deg,rgba(255,255,255,0.28),transparent);animation:scl 2s ease-in-out infinite}
+.sc{position:absolute;bottom:32px;right:52px;z-index:10;display:flex;align-items:center;gap:14px;pointer-events:none}
+.sc span{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.28)}
+.sc-line{width:1px;height:50px;background:linear-gradient(180deg,rgba(255,255,255,0.3),transparent);animation:scl 2s ease-in-out infinite}
 @keyframes scl{0%,100%{opacity:0.3}50%{opacity:1}}
 
 /* ── CONTENT SECTIONS ── */
-.sec{background:#0a0a0a;position:relative;z-index:20}
+.sec{background:#0a0a0a;position:relative;z-index:10}
 
-/* Stats */
 #s-stats{
   display:grid;grid-template-columns:1fr 1fr;gap:80px;
-  padding:110px 60px;
-  border-top:1px solid rgba(255,255,255,0.07);
-  align-items:center;
-  background:#0a0a0a;
+  padding:110px 60px;border-top:1px solid rgba(255,255,255,0.07);align-items:center;
 }
 .tag{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#8B6343;margin-bottom:18px}
 .sh2{font-style:italic;font-weight:900;font-size:clamp(44px,5vw,72px);line-height:0.94;color:#fff;margin-bottom:24px}
@@ -225,25 +75,14 @@ nav{
 .sn{font-style:italic;font-weight:900;font-size:54px;color:var(--c,#1A3A6B);line-height:1}
 .sl{margin-top:8px;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3)}
 
-/* Services */
-#s-services{
-  padding:110px 60px;
-  background:#0c0c0c;
-  border-top:1px solid rgba(255,255,255,0.05);
-}
+#s-services{padding:110px 60px;background:#0c0c0c;border-top:1px solid rgba(255,255,255,0.05)}
 .svc-g{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:64px}
-.svc-c{
-  background:#0f0f0f;padding:46px 34px;
-  border-top:3px solid transparent;
-  transition:border-color .25s,background .25s;
-  cursor:default;
-}
+.svc-c{background:#0f0f0f;padding:46px 34px;border-top:3px solid transparent;transition:border-color .25s,background .25s;cursor:default}
 .svc-c:hover{border-top-color:#1A3A6B;background:#111}
 .svc-c svg{width:42px;height:42px;margin-bottom:26px;display:block}
 .svc-n{font-style:italic;font-weight:900;font-size:21px;color:#fff;margin-bottom:12px}
 .svc-d{font-size:14px;line-height:1.65;color:rgba(255,255,255,0.38)}
 
-/* CTA */
 #s-cta{
   padding:110px 60px;background:#1A3A6B;
   display:flex;align-items:center;justify-content:space-between;gap:60px;
@@ -251,21 +90,10 @@ nav{
 }
 #s-cta h2{font-style:italic;font-weight:900;font-size:clamp(44px,5vw,72px);line-height:0.92;color:#fff}
 #s-cta h2 em{color:rgba(255,255,255,0.28);font-style:italic}
-.cta-btn{
-  flex-shrink:0;background:#fff;color:#1A3A6B;border:none;
-  padding:22px 52px;font-family:inherit;font-style:italic;
-  font-weight:900;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;
-  cursor:pointer;transition:transform .18s;white-space:nowrap;
-}
+.cta-btn{flex-shrink:0;background:#fff;color:#1A3A6B;border:none;padding:22px 52px;font-family:inherit;font-style:italic;font-weight:900;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:transform .18s;white-space:nowrap}
 .cta-btn:hover{transform:scale(1.04)}
 
-/* Footer */
-footer{
-  background:#070707;
-  border-top:1px solid rgba(255,255,255,0.06);
-  padding:44px 60px;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;
-}
+footer{background:#070707;border-top:1px solid rgba(255,255,255,0.06);padding:44px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
 .fl{font-style:italic;font-weight:900;font-size:17px;color:#fff}
 .fl b{color:#8B6343;font-style:normal}
 .flinks{display:flex;gap:28px}
@@ -275,21 +103,16 @@ footer{
 
 @media(max-width:768px){
   nav{padding:0 20px}.nav-links{display:none}
-  .hero-txt{left:24px;bottom:35%}
-  .h1{font-size:clamp(52px,14vw,80px)}
+  .hero-text{left:24px;bottom:20%}.h1{font-size:clamp(52px,14vw,80px)}
   #s-stats{grid-template-columns:1fr;padding:70px 24px;gap:44px}
   #s-services{padding:70px 24px}.svc-g{grid-template-columns:1fr}
   #s-cta{flex-direction:column;padding:70px 24px;text-align:center}
   footer{padding:32px 24px;flex-direction:column}
-  #tk-main{width:170vw}
-  #tk-mid{width:120vw}
-  #tk-far{width:90vw}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="logo">JNB<b>.</b>EXPRESS</div>
   <ul class="nav-links">
@@ -300,41 +123,29 @@ footer{
   <button class="nav-btn">Book Now</button>
 </nav>
 
-<!-- ══════════ HERO ══════════ -->
+<!-- ══ HERO — canvas fills 100vw x 100vh, exactly like Terminal Industries ══ -->
 <section id="hero">
-  <div class="pin" id="pin">
+  <div class="sticky" id="sticky">
 
-    <div class="sky" id="sky"></div>
-    <div class="bg-atm"></div>
-    <div class="sun" id="sun"></div>
-    <div class="ground"></div>
-    <div class="road"></div>
-    <div class="dashes"></div>
-    <div id="beam"></div>
+    <!-- Canvas: full viewport, truck drawn at full height -->
+    <canvas id="scene"></canvas>
 
-    <!-- Trucks — width in vw, no JS dimension reading needed -->
-    <img id="tk-far"  class="truck" src="img/truck-far.jpg"  alt="">
-    <img id="tk-mid"  class="truck" src="img/truck-mid.jpg"  alt="">
-    <img id="tk-main" class="truck" src="img/truck-main.jpg" alt="">
-
-    <!-- Text -->
-    <div class="hero-txt" id="htxt">
+    <!-- Text overlaid on top of canvas -->
+    <div class="hero-text" id="htxt">
       <div class="eyebrow">Tbilisi Premium Courier &nbsp;·&nbsp; 2026</div>
       <h1 class="h1">WE MOVE<br><em>TBILISI.</em></h1>
       <p class="sub">Same-Day Delivery &nbsp;·&nbsp; Every District &nbsp;·&nbsp; Flat-Rate Zones</p>
     </div>
 
-    <!-- Scroll cue -->
     <div class="sc" id="sc">
-      <span class="sc-lbl">Scroll to explore</span>
+      <span>Scroll to explore</span>
       <div class="sc-line"></div>
     </div>
 
-    <div class="vig"></div>
   </div>
 </section>
 
-<!-- ══════════ STATS ══════════ -->
+<!-- ══ STATS ══ -->
 <section class="sec" id="s-stats">
   <div>
     <div class="tag">Coverage Network</div>
@@ -349,49 +160,36 @@ footer{
   </div>
 </section>
 
-<!-- ══════════ SERVICES ══════════ -->
+<!-- ══ SERVICES ══ -->
 <section class="sec" id="s-services">
   <div class="tag">What We Move</div>
   <h2 class="sh2">Built for<br>every load.</h2>
   <div class="svc-g">
     <div class="svc-c" style="border-top-color:#1A3A6B">
-      <svg viewBox="0 0 42 42" fill="none">
-        <rect x="3" y="11" width="28" height="22" rx="2" stroke="#1A3A6B" stroke-width="2"/>
-        <path d="M31 19h7v10l-7 4V19Z" stroke="#8B6343" stroke-width="2"/>
-        <circle cx="9" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-        <circle cx="27" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-      </svg>
+      <svg viewBox="0 0 42 42" fill="none"><rect x="3" y="11" width="28" height="22" rx="2" stroke="#1A3A6B" stroke-width="2"/><path d="M31 19h7v10l-7 4V19Z" stroke="#8B6343" stroke-width="2"/><circle cx="9" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><circle cx="27" cy="35" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg>
       <div class="svc-n">Express Delivery</div>
       <div class="svc-d">Same-day door-to-door across Tbilisi. Flat-rate zone pricing. No hidden fees, no surprises.</div>
     </div>
     <div class="svc-c">
-      <svg viewBox="0 0 42 42" fill="none">
-        <rect x="7" y="5" width="28" height="32" rx="2" stroke="#1A3A6B" stroke-width="2"/>
-        <line x1="13" y1="15" x2="29" y2="15" stroke="#8B6343" stroke-width="2"/>
-        <line x1="13" y1="21" x2="29" y2="21" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-        <line x1="13" y1="27" x2="23" y2="27" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-      </svg>
+      <svg viewBox="0 0 42 42" fill="none"><rect x="7" y="5" width="28" height="32" rx="2" stroke="#1A3A6B" stroke-width="2"/><line x1="13" y1="15" x2="29" y2="15" stroke="#8B6343" stroke-width="2"/><line x1="13" y1="21" x2="29" y2="21" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><line x1="13" y1="27" x2="23" y2="27" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
       <div class="svc-n">Business Courier</div>
       <div class="svc-d">Dedicated routes for offices, e-commerce, and retail. Volume pricing and account invoicing.</div>
     </div>
     <div class="svc-c">
-      <svg viewBox="0 0 42 42" fill="none">
-        <circle cx="21" cy="21" r="16" stroke="#1A3A6B" stroke-width="2"/>
-        <path d="M21 5v16l9 5" stroke="#8B6343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <svg viewBox="0 0 42 42" fill="none"><circle cx="21" cy="21" r="16" stroke="#1A3A6B" stroke-width="2"/><path d="M21 5v16l9 5" stroke="#8B6343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="svc-n">Scheduled Runs</div>
       <div class="svc-d">Regular timed pickups for recurring clients. Lock your slot — we handle the rest every day.</div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ CTA ══════════ -->
+<!-- ══ CTA ══ -->
 <section class="sec" id="s-cta">
   <h2>Ready to move<br><em>with JNB?</em></h2>
   <button class="cta-btn">Get a Quote &rarr;</button>
 </section>
 
-<!-- ══════════ FOOTER ══════════ -->
+<!-- ══ FOOTER ══ -->
 <footer>
   <div class="fl">JNB<b>.</b>EXPRESS</div>
   <div class="flinks">
@@ -406,78 +204,190 @@ footer{
 (function(){
 
   var hero  = document.getElementById('hero');
-  var sky   = document.getElementById('sky');
-  var sun   = document.getElementById('sun');
+  var canvas= document.getElementById('scene');
+  var ctx   = canvas.getContext('2d');
   var htxt  = document.getElementById('htxt');
   var sc    = document.getElementById('sc');
-  var beam  = document.getElementById('beam');
 
-  /*
-    TRUCKS — all widths set in CSS as VW.
-    Start position = 100vw + lag (so truck enters from right).
-    End position   = -(truck width in vw) (exits left).
-    Using VW means ZERO dependency on offsetWidth.
-  */
-  var trucks = [
-    { el: document.getElementById('tk-far'),  vw: 55,  lag: 35, speed: 0.50 },
-    { el: document.getElementById('tk-mid'),  vw: 75,  lag: 20, speed: 0.72 },
-    { el: document.getElementById('tk-main'), vw: 110, lag:  5, speed: 1.00 }
-  ];
+  /* ── IMAGES ── */
+  var imgMain = new Image();
+  var imgBg1  = new Image();
+  var imgFleet= new Image();
+  var loaded  = 0;
+  var TOTAL   = 3;
 
+  function onLoad(){ loaded++; if(loaded === TOTAL) drawFrame(); }
+  imgMain.onload = onLoad;
+  imgBg1.onload  = onLoad;
+  imgFleet.onload= onLoad;
+  imgMain.src = 'img/truck-main.jpg';
+  imgBg1.src  = 'img/truck-bg1.jpg';
+  imgFleet.src= 'img/bg-fleet.jpg';
+
+  /* ── RESIZE ── */
+  function resize(){
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drawFrame();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  /* ── SCROLL PROGRESS ── */
   function progress(){
     var heroH = hero.offsetHeight;
     var vh    = window.innerHeight;
     return Math.max(0, Math.min(1, window.pageYOffset / (heroH - vh)));
   }
 
-  function tick(){
+  /* ── DRAW ── */
+  function drawFrame(){
+    var cw = canvas.width;
+    var ch = canvas.height;
     var p  = progress();
-    var vw = window.innerWidth;
 
-    trucks.forEach(function(T){
-      /* start: 100vw + lag% off screen right */
-      var startPx = vw + (T.lag / 100) * vw;
-      /* end: truck width (in px) off screen left */
-      var endPx   = -(T.vw / 100) * vw - 40;
-      var x = startPx + (endPx - startPx) * p * T.speed;
-      T.el.style.transform = 'translateX(' + x + 'px)';
-    });
+    ctx.clearRect(0, 0, cw, ch);
 
-    /* Beam tracks leading edge of main truck cab */
-    var mainStart = vw + (trucks[2].lag / 100) * vw;
-    var mainEnd   = -(trucks[2].vw / 100) * vw - 40;
-    var mainX     = mainStart + (mainEnd - mainStart) * p;
-    var mainW     = (trucks[2].vw / 100) * vw;
-    /* cab is approx right 20% of image */
-    beam.style.left    = (mainX + mainW * 0.78) + 'px';
-    beam.style.opacity = Math.max(0, 1 - p * 2.2).toString();
+    /* 1 ── SKY GRADIENT ── warm orange/peach → dark ground */
+    var skyProgress = p; // sky shifts slightly as truck passes
+    var skyGrad = ctx.createLinearGradient(0, 0, 0, ch);
+    skyGrad.addColorStop(0,   'rgb(' + lerp(100,60,p) + ',' + lerp(90,40,p) + ',' + lerp(80,20,p) + ')');
+    skyGrad.addColorStop(0.25,'rgb(' + lerp(190,120,p) + ',' + lerp(140,70,p) + ',' + lerp(90,30,p) + ')');
+    skyGrad.addColorStop(0.55,'rgb(' + lerp(220,140,p) + ',' + lerp(160,80,p) + ',' + lerp(80,20,p) + ')');
+    skyGrad.addColorStop(0.62,'rgb(20,12,5)');
+    skyGrad.addColorStop(1,   'rgb(5,3,2)');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, cw, ch);
 
-    /* Fade hero text */
-    var fade = Math.max(0, 1 - p * 2.6);
-    htxt.style.opacity = fade.toString();
-    sc.style.opacity   = Math.max(0, fade - 0.2).toString();
+    /* 2 ── FLEET ATMOSPHERE (very dark, low opacity) ── */
+    if(imgFleet.complete && imgFleet.naturalWidth){
+      ctx.save();
+      ctx.globalAlpha = 0.12;
+      var fAsp = imgFleet.naturalWidth / imgFleet.naturalHeight;
+      var fH = ch * 0.5;
+      var fW = fH * fAsp;
+      ctx.drawImage(imgFleet, (cw - fW) / 2, ch * 0.15, fW, fH);
+      ctx.restore();
+    }
 
-    /* Sky colour shift: deep dawn → warm dusk */
-    var r0 = Math.round(6  + p * 20); var g0 = Math.round(13 + p * 5);  var b0 = Math.round(23 - p * 10);
-    var r1 = Math.round(26 + p * 40); var g1 = Math.round(30 + p * 4);  var b1 = Math.round(20 - p * 14);
-    var r2 = Math.round(74 + p * 30); var g2 = Math.round(46 - p * 18); var b2 = Math.round(10 - p * 4);
-    sky.style.background = [
-      'linear-gradient(180deg,',
-      'rgb('+r0+','+g0+','+b0+') 0%,',
-      'rgb('+r1+','+g1+','+b1+') 14%,',
-      'rgb('+r2+','+g2+','+b2+') 50%,',
-      '#2c1204 67%,',
-      '#0e0704 82%,',
-      '#050302 100%)'
-    ].join('');
+    /* 3 ── GROUND SHADOW at horizon ── */
+    var horizonY = ch * 0.60;
+    var groundGrad = ctx.createLinearGradient(0, horizonY, 0, ch);
+    groundGrad.addColorStop(0, 'rgba(0,0,0,0)');
+    groundGrad.addColorStop(0.2, 'rgba(0,0,0,0.7)');
+    groundGrad.addColorStop(1, 'rgba(0,0,0,1)');
+    ctx.fillStyle = groundGrad;
+    ctx.fillRect(0, horizonY, cw, ch - horizonY);
 
-    sun.style.opacity = Math.max(0, 1 - p * 1.8).toString();
+    /* 4 ── TRUCKS ── drawn on canvas, full height like Terminal */
+    if(imgMain.complete && imgMain.naturalWidth){
+      drawTruck(imgBg1,  p, 0.45, 0.38, 0.25, 0.12); // far, tiny, dark
+      drawTruck(imgBg1,  p, 0.68, 0.60, 0.40, 0.18); // mid
+      drawTruck(imgMain, p, 1.00, 0.88,  1.0, 0);     // main foreground
+    }
+
+    /* 5 ── ROAD LINE ── */
+    var roadY = ch * 0.60;
+    var roadGrad = ctx.createLinearGradient(0, 0, cw, 0);
+    roadGrad.addColorStop(0,   'rgba(0,0,0,0)');
+    roadGrad.addColorStop(0.1, 'rgba(180,140,60,0.35)');
+    roadGrad.addColorStop(0.5, 'rgba(210,170,80,0.6)');
+    roadGrad.addColorStop(0.9, 'rgba(180,140,60,0.35)');
+    roadGrad.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = roadGrad;
+    ctx.fillRect(0, roadY, cw, 3);
+
+    /* 6 ── HEADLIGHT BEAM ── */
+    drawBeam(p);
+
+    /* 7 ── VIGNETTE ── */
+    var vigGrad = ctx.createRadialGradient(cw/2, ch/2, ch*0.2, cw/2, ch/2, ch*0.9);
+    vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
+    vigGrad.addColorStop(1, 'rgba(0,0,0,0.55)');
+    ctx.fillStyle = vigGrad;
+    ctx.fillRect(0, 0, cw, ch);
+
+    /* 8 ── TEXT FADE ── */
+    var fade = Math.max(0, 1 - p * 2.8);
+    htxt.style.opacity = fade.toFixed(3);
+    sc.style.opacity   = Math.max(0, fade - 0.2).toFixed(3);
   }
 
-  /* Run immediately, on scroll, on resize */
-  tick();
-  window.addEventListener('scroll', tick, { passive: true });
-  window.addEventListener('resize', tick);
+  /*
+    drawTruck: draws a truck image on the canvas
+    speed: how fast it moves (1.0 = full travel, 0.45 = slow/far)
+    heightFrac: truck height as fraction of canvas height
+    alpha: opacity
+    blur: 0 = sharp, >0 = blurry (distance)
+  */
+  function drawTruck(img, p, speed, heightFrac, alpha, blur){
+    if(!img.complete || !img.naturalWidth) return;
+
+    var cw = canvas.width;
+    var ch = canvas.height;
+
+    /* Scale truck to fill heightFrac of canvas height */
+    var tH = ch * heightFrac;
+    var tW = tH * (img.naturalWidth / img.naturalHeight);
+
+    /* Vertical: align bottom of truck to ground line */
+    var roadY = ch * 0.60;
+    var tY = roadY - tH;
+
+    /* Horizontal travel: start at cw (off right), end at -tW (off left) */
+    var totalTravel = cw + tW;
+    var startX = cw; // enter from right
+    var x = startX - p * speed * totalTravel;
+
+    ctx.save();
+    ctx.globalAlpha = alpha * Math.max(0, 1 - Math.max(0, (x + tW < 0 ? 1 : 0)));
+
+    if(blur > 0){
+      ctx.filter = 'blur(' + (blur * 4) + 'px) brightness(' + (0.3 + blur * 0.1) + ') saturate(0.1)';
+    }
+
+    ctx.drawImage(img, x, tY, tW, tH);
+    ctx.restore();
+  }
+
+  function drawBeam(p){
+    var cw = canvas.width;
+    var ch = canvas.height;
+
+    /* Main truck leading edge x position */
+    var tH  = ch * 0.88;
+    var tW  = tH * (imgMain.naturalWidth / imgMain.naturalHeight);
+    var roadY = ch * 0.60;
+    var totalTravel = cw + tW;
+    var x = cw - p * totalTravel;
+    var headlightX = x + tW * 0.98; // right edge of truck = headlights
+
+    /* Beam cone emanates rightward from headlight */
+    if(headlightX < cw + 100 && headlightX > -100){
+      var beamGrad = ctx.createLinearGradient(headlightX, 0, headlightX + 600, 0);
+      beamGrad.addColorStop(0,   'rgba(230,210,130,0.22)');
+      beamGrad.addColorStop(0.5, 'rgba(230,210,130,0.07)');
+      beamGrad.addColorStop(1,   'rgba(0,0,0,0)');
+
+      ctx.save();
+      ctx.beginPath();
+      var beamY = roadY;
+      ctx.moveTo(headlightX, beamY * 0.65);
+      ctx.lineTo(headlightX + 650, beamY - 20);
+      ctx.lineTo(headlightX + 650, beamY + 10);
+      ctx.lineTo(headlightX, beamY * 0.95);
+      ctx.closePath();
+      ctx.fillStyle = beamGrad;
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function lerp(a, b, t){ return Math.round(a + (b - a) * Math.min(1, Math.max(0, t))); }
+
+  window.addEventListener('scroll', function(){
+    requestAnimationFrame(drawFrame);
+  }, { passive: true });
 
 })();
 </script>
